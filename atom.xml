@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhaid0ngxue.github.io</id>
     <title>ZhaiD0ngxue&apos;s Blog.</title>
-    <updated>2021-06-15T02:39:07.106Z</updated>
+    <updated>2021-06-15T04:02:37.486Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhaid0ngxue.github.io"/>
     <link rel="self" href="https://zhaid0ngxue.github.io/atom.xml"/>
@@ -10,6 +10,47 @@
     <logo>https://zhaid0ngxue.github.io/images/avatar.png</logo>
     <icon>https://zhaid0ngxue.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, ZhaiD0ngxue&apos;s Blog.</rights>
+    <entry>
+        <title type="html"><![CDATA[2021012601 - gitee做图床]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021012601-gitee-zuo-tu-chuang/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021012601-gitee-zuo-tu-chuang/">
+        </link>
+        <updated>2021-06-15T04:02:20.000Z</updated>
+        <content type="html"><![CDATA[<p>my index node:2021012601</p>
+<p>done</p>
+<p>[toc]</p>
+<h1 id="gitee做图床">gitee做图床</h1>
+<ol>
+<li>点击+号,创建一个公用仓库.</li>
+</ol>
+<figure data-type="image" tabindex="1"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc1.png" alt="" loading="lazy"></figure>
+<ol start="2">
+<li>如下配置即可.修改仓库名,设置为公开,使用readme初始化仓库.点击创建.</li>
+</ol>
+<figure data-type="image" tabindex="2"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc2.png" alt="" loading="lazy"></figure>
+<ol start="3">
+<li>复制链接.</li>
+</ol>
+<figure data-type="image" tabindex="3"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc3.png" alt="" loading="lazy"></figure>
+<ol start="4">
+<li>使用git工具将仓库拉取到本地</li>
+</ol>
+<figure data-type="image" tabindex="4"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc4.png" alt="" loading="lazy"></figure>
+<ol start="5">
+<li>在本地仓库中,按照自己的想法,划分目录结构,并将图片放置这对应目录下.</li>
+</ol>
+<figure data-type="image" tabindex="5"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc5.png" alt="" loading="lazy"></figure>
+<ol start="6">
+<li>推送本地的文件到gitee图床上.</li>
+</ol>
+<figure data-type="image" tabindex="6"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc6.png" alt="" loading="lazy"></figure>
+<ol start="7">
+<li>使用图床,链接书写方式如下.注意其中的raw/master/</li>
+</ol>
+<pre><code>![](https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc1.png)
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[2021050401 - 编译安装nginx]]></title>
         <id>https://zhaid0ngxue.github.io/post/2021050401-bian-yi-an-zhuang-nginx/</id>
