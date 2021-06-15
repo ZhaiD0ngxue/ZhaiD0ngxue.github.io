@@ -1,22 +1,107 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://zhaid0ngxue.github.io</id>
-    <title>ZhaiD0ngxue&apos;s Blog.</title>
-    <updated>2021-06-15T02:21:22.476Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://zhaid0ngxue.github.io"/>
-    <link rel="self" href="https://zhaid0ngxue.github.io/atom.xml"/>
-    <subtitle>学习?学个屁...</subtitle>
-    <logo>https://zhaid0ngxue.github.io/images/avatar.png</logo>
-    <icon>https://zhaid0ngxue.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, ZhaiD0ngxue&apos;s Blog.</rights>
-    <entry>
-        <title type="html"><![CDATA[2021050401 - 编译安装nginx]]></title>
-        <id>https://zhaid0ngxue.github.io/post/2021050401-bian-yi-an-zhuang-nginx/</id>
-        <link href="https://zhaid0ngxue.github.io/post/2021050401-bian-yi-an-zhuang-nginx/">
-        </link>
-        <updated>2021-06-15T02:20:48.000Z</updated>
-        <content type="html"><![CDATA[<p>my index node: 2021050401</p>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" >
+
+<title>2021050401 - 编译安装nginx | ZhaiD0ngxue&#39;s Blog.</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<link rel="shortcut icon" href="https://zhaid0ngxue.github.io/favicon.ico?v=1623723673735">
+<link rel="stylesheet" href="https://zhaid0ngxue.github.io/styles/main.css">
+
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+
+
+    <meta name="description" content="my index node: 2021050401
+[toc]
+编译安装nginx
+规划说明
+nginx-1.20.0.tar.gz
+
+准备相关支持文件
+[root@c803-18 ~]# dnf -y install gcc pcre-d..." />
+    <meta name="keywords" content="" />
+  </head>
+  <body>
+    <div id="app" class="main">
+
+      <div class="sidebar" :class="{ 'full-height': menuVisible }">
+  <div class="top-container" data-aos="fade-right">
+    <div class="top-header-container">
+      <a class="site-title-container" href="https://zhaid0ngxue.github.io">
+        <img src="https://zhaid0ngxue.github.io/images/avatar.png?v=1623723673735" class="site-logo">
+        <h1 class="site-title">ZhaiD0ngxue&#39;s Blog.</h1>
+      </a>
+      <div class="menu-btn" @click="menuVisible = !menuVisible">
+        <div class="line"></div>
+      </div>
+    </div>
+    <div>
+      
+        
+          <a href="/" class="site-nav">
+            首页
+          </a>
+        
+      
+        
+          <a href="/archives" class="site-nav">
+            归档
+          </a>
+        
+      
+        
+          <a href="/tags" class="site-nav">
+            标签
+          </a>
+        
+      
+        
+          <a href="/post/about" class="site-nav">
+            关于
+          </a>
+        
+      
+    </div>
+  </div>
+  <div class="bottom-container" data-aos="flip-up" data-aos-offset="0">
+    <div class="social-container">
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    </div>
+    <div class="site-description">
+      学习?学个屁...
+    </div>
+    <div class="site-footer">
+      Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | <a class="rss" href="https://zhaid0ngxue.github.io/atom.xml" target="_blank">RSS</a>
+    </div>
+  </div>
+</div>
+
+
+      <div class="main-container">
+        <div class="content-container" data-aos="fade-up">
+          <div class="post-detail">
+            <h2 class="post-title">2021050401 - 编译安装nginx</h2>
+            <div class="post-date">2021-06-15</div>
+            
+            <div class="post-content" v-pre>
+              <p>my index node: 2021050401</p>
 <p>[toc]</p>
 <h1 id="编译安装nginx">编译安装nginx</h1>
 <h2 id="规划说明">规划说明</h2>
@@ -168,112 +253,46 @@ systemctl daemon-reload
 systemctl enable --now nginx.service
 nginx -V
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2021041901 - 编译安装php-8.0.3]]></title>
-        <id>https://zhaid0ngxue.github.io/post/2021041901-bian-yi-an-zhuang-php-803/</id>
-        <link href="https://zhaid0ngxue.github.io/post/2021041901-bian-yi-an-zhuang-php-803/">
-        </link>
-        <updated>2021-06-15T02:07:33.000Z</updated>
-        <content type="html"><![CDATA[<p>my index node: 2021041901</p>
-<p>[toc]</p>
-<h1 id="编译安装php-803">编译安装php-8.0.3</h1>
-<h2 id="规划说明">规划说明</h2>
-<pre><code>php-8.0.3.tar.gz
-</code></pre>
-<h2 id="依赖">依赖</h2>
-<pre><code>[root@c803-58 ~]# dnf -y install gcc libxml2-devel sqlite-devel make
 
-</code></pre>
-<h2 id="编译安装">编译安装</h2>
-<pre><code>[root@c803-58 ~]# tar xvf php-8.0.3.tar.gz 
-[root@c803-58 ~]# cd php-8.0.3
-# 这里只是最基本的config配置项,按需添加即可
-[root@c803-58 php-8.0.3]# ./configure --prefix=/usr/local/php --enable-fpm --with-config-file-path=/etc --with-config-file-scan-dir=/etc/php.d
-[root@c803-58 php-8.0.3]# make
-[root@c803-58 php-8.0.3]# make install
+            </div>
+            
+            
+              <div class="next-post">
+                <div class="next">下一篇</div>
+                <a href="https://zhaid0ngxue.github.io/post/2021041901-bian-yi-an-zhuang-php-803/">
+                  <h3 class="post-title">
+                    2021041901 - 编译安装php-8.0.3
+                  </h3>
+                </a>
+              </div>
+            
 
-</code></pre>
-<h2 id="添加用户">添加用户</h2>
-<pre><code>[root@c803-58 ~]# groupadd -r -g 8000 php
-[root@c803-58 ~]# useradd -r -g 8000 -u 8000 php
-[root@c803-58 ~]# chown -R php:php /usr/local/php/
-</code></pre>
-<h2 id="配置">配置</h2>
-<pre><code>[root@c803-58 ~]# cd php-8.0.3
-[root@c803-58 php-8.0.3]# cp -av php.ini-production /etc/php.ini
-[root@c803-58 php-8.0.3]# cd /usr/local/php/etc/
-[root@c803-58 etc]# cp -av php-fpm.conf.default php-fpm.conf
-[root@c803-58 etc]# cp -av php-fpm.d/www.conf.default php-fpm.d/www.conf
-[root@c803-58 ~]# vim /usr/local/php/etc/php-fpm.conf
+            
 
-;error_log = log/php-fpm.log
-error_log = log/php-fpm.log
+          </div>
 
-[root@c803-58 ~]# vim /usr/local/php/etc/php-fpm.d/www.conf
+        </div>
+      </div>
+    </div>
 
-user = php
-group = php
-listen = 0.0.0.0:8000
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+<script type="application/javascript">
+
+AOS.init();
+
+var app = new Vue({
+  el: '#app',
+  data: {
+    menuVisible: false,
+  },
+})
+
+</script>
 
 
-</code></pre>
-<h2 id="opcache加速">opcache加速</h2>
-<pre><code>[root@c803-58 ~]# vim /etc/php.ini 
-
-[opcache]
-opcache.enable=1
-zend_extension=opcache.so
-
-</code></pre>
-<h2 id="环境变量">环境变量</h2>
-<pre><code>[root@c803-58 ~]# echo 'PATH=/usr/local/php/bin/:$PATH' &gt; /etc/profile.d/php.sh
-[root@c803-58 ~]# source /etc/profile.d/php.sh
-
-</code></pre>
-<h2 id="启动服务">启动服务</h2>
-<pre><code>[root@c803-58 ~]# cd php-8.0.3
-[root@c803-58 php-8.0.3]# cp -av sapi/fpm/php-fpm.service /usr/lib/systemd/system
-
-# 需要修改,否则无法启动,/var/log/messages中会有如下报错
-# Apr 19 10:58:53 c803-58 php-fpm[105484]: [19-Apr-2021 10:58:53] ERROR: failed to open error_log (/usr/local/php/var/log/php-fpm.log): Read-only file system (30)
-[root@c803-58 ~]# vim /usr/lib/systemd/system/php-fpm.service 
-
-#ProtectSystem=full
-ProtectSystem=false
-
-[root@c803-58 ~]# systemctl daemon-reload
-[root@c803-58 ~]# systemctl start php-fpm
-
-</code></pre>
-<h2 id="httpd">httpd</h2>
-<pre><code>[root@c803-58 ~]# dnf -y install httpd
-[root@c803-58 ~]# vim /var/www/html/info.php
-
-&lt;?php
-phpinfo();
-?&gt;
-
-[root@c803-58 ~]# vim /etc/httpd/conf.d/test.conf 
-
-DirectoryIndex index.php
-ProxyRequests Off
-ProxyPassMatch ^/(.*\.php)$ unix:/var/run/php.sock|fcgi://127.0.0.1:8000/var/www/html/$1
 
 
-[root@c803-58 ~]# systemctl start httpd
-[root@c803-58 ~]# curl -I localhost/info.php
-HTTP/1.1 200 OK
-Date: Mon, 19 Apr 2021 03:17:14 GMT
-Server: Apache/2.4.37 (centos)
-X-Powered-By: PHP/8.0.3
-Content-Type: text/html; charset=UTF-8
 
-[root@c803-58 ~]# 
 
-# 或者浏览器访问 http://10.0.0.58/info.php
-</code></pre>
-]]></content>
-    </entry>
-</feed>
+  </body>
+</html>
