@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhaid0ngxue.github.io</id>
     <title>ZhaiD0ngxue&apos;s Blog.</title>
-    <updated>2021-06-15T05:45:09.080Z</updated>
+    <updated>2021-06-23T05:38:51.732Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhaid0ngxue.github.io"/>
     <link rel="self" href="https://zhaid0ngxue.github.io/atom.xml"/>
@@ -10,6 +10,65 @@
     <logo>https://zhaid0ngxue.github.io/images/avatar.png</logo>
     <icon>https://zhaid0ngxue.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, ZhaiD0ngxue&apos;s Blog.</rights>
+    <entry>
+        <title type="html"><![CDATA[2021012602 - Linux系统的图形化界面重定向]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021012602-linux-xi-tong-de-tu-xing-hua-jie-mian-chong-ding-xiang/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021012602-linux-xi-tong-de-tu-xing-hua-jie-mian-chong-ding-xiang/">
+        </link>
+        <updated>2021-06-23T05:38:04.000Z</updated>
+        <content type="html"><![CDATA[<p>my index node:2021012602</p>
+<p>done</p>
+<p>[toc]</p>
+<h1 id="linux系统的图形化界面重定向">Linux系统的图形化界面重定向</h1>
+<h2 id="实现目标">实现目标:</h2>
+<p>远程服务器为命令行界面,通过ssh远程连接到主机后,运行图形化界面程序,将GUI重定向到本地电脑,程序正常运行.</p>
+<h2 id="实验环境">实验环境</h2>
+<p>CentOS7U9 minimal</p>
+<h2 id="可选操作">可选操作</h2>
+<ol>
+<li>服务器需要安装图形化界面</li>
+</ol>
+<pre><code>[root@zdx ~]# yum groupinstall &quot;GNOME Desktop&quot;
+</code></pre>
+<h2 id="实验步骤">实验步骤</h2>
+<ol>
+<li>本地Windows电脑安装Xming工具,如下步骤.<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall1.png" alt="" loading="lazy"><br>
+修改安装路径<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall2.png" alt="" loading="lazy"><br>
+修改安装的组件<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall3.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall4.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall5.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall6.png" alt="" loading="lazy"><br>
+可以先不启动Xming<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall7.png" alt="" loading="lazy"></li>
+<li>本地Windows电脑运行Xlaunch工具来启动Xming.<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse1.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse2.png" alt="" loading="lazy"><br>
+此处注意,需要勾选&quot;No Access Control&quot;<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse3.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse4.png" alt="" loading="lazy"></li>
+<li>在Windows的右下角托盘中查看到本地开启的窗口编号,如0.0<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse5.png" alt="" loading="lazy"></li>
+<li>确认连接到远程服务器的本地WindowsIP地址,如我的Windows的IP是10.0.0.1</li>
+<li>在远程服务器端执行如下命令,声明环境变量.将Xserver重定向到本地Windows.(需要注意IP是本地Windows的IP)</li>
+</ol>
+<pre><code>[root@zdx ~]# echo $DISPLAY
+
+[root@zdx ~]# export DISPLAY=10.0.0.1:0.0
+[root@zdx ~]# echo $DISPLAY
+10.0.0.1:0.0
+[root@zdx ~]# 
+</code></pre>
+<ol start="6">
+<li>接下来就可以运行图形化程序了.</li>
+</ol>
+<pre><code>[root@zdx ~]# firefox
+Running without a11y support!
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[2021012601 - gitee做图床]]></title>
         <id>https://zhaid0ngxue.github.io/post/2021012601-gitee-zuo-tu-chuang/</id>

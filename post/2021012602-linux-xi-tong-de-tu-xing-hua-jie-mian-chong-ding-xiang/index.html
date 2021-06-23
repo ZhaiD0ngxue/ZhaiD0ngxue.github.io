@@ -1,0 +1,225 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2021012602 - Linux系统的图形化界面重定向 | ZhaiD0ngxue&#39;s Blog.</title>
+<link rel="shortcut icon" href="https://zhaid0ngxue.github.io/favicon.ico?v=1624426712260">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zhaid0ngxue.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="2021012602 - Linux系统的图形化界面重定向 | ZhaiD0ngxue&#39;s Blog. - Atom Feed" href="https://zhaid0ngxue.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="my index node:2021012602
+done
+[toc]
+Linux系统的图形化界面重定向
+实现目标:
+远程服务器为命令行界面,通过ssh远程连接到主机后,运行图形化界面程序,将GUI重定向到本地电脑,程序正常运行.
+实验环境..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zhaid0ngxue.github.io">
+  <img class="avatar" src="https://zhaid0ngxue.github.io/images/avatar.png?v=1624426712260" alt="">
+  </a>
+  <h1 class="site-title">
+    ZhaiD0ngxue&#39;s Blog.
+  </h1>
+  <p class="site-description">
+    <font color=red> 学习?学个屁... </font>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              2021012602 - Linux系统的图形化界面重定向
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-06-23
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>my index node:2021012602</p>
+<p>done</p>
+<p>[toc]</p>
+<h1 id="linux系统的图形化界面重定向">Linux系统的图形化界面重定向</h1>
+<h2 id="实现目标">实现目标:</h2>
+<p>远程服务器为命令行界面,通过ssh远程连接到主机后,运行图形化界面程序,将GUI重定向到本地电脑,程序正常运行.</p>
+<h2 id="实验环境">实验环境</h2>
+<p>CentOS7U9 minimal</p>
+<h2 id="可选操作">可选操作</h2>
+<ol>
+<li>服务器需要安装图形化界面</li>
+</ol>
+<pre><code>[root@zdx ~]# yum groupinstall &quot;GNOME Desktop&quot;
+</code></pre>
+<h2 id="实验步骤">实验步骤</h2>
+<ol>
+<li>本地Windows电脑安装Xming工具,如下步骤.<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall1.png" alt="" loading="lazy"><br>
+修改安装路径<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall2.png" alt="" loading="lazy"><br>
+修改安装的组件<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall3.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall4.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall5.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall6.png" alt="" loading="lazy"><br>
+可以先不启动Xming<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall7.png" alt="" loading="lazy"></li>
+<li>本地Windows电脑运行Xlaunch工具来启动Xming.<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse1.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse2.png" alt="" loading="lazy"><br>
+此处注意,需要勾选&quot;No Access Control&quot;<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse3.png" alt="" loading="lazy"><br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse4.png" alt="" loading="lazy"></li>
+<li>在Windows的右下角托盘中查看到本地开启的窗口编号,如0.0<br>
+<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse5.png" alt="" loading="lazy"></li>
+<li>确认连接到远程服务器的本地WindowsIP地址,如我的Windows的IP是10.0.0.1</li>
+<li>在远程服务器端执行如下命令,声明环境变量.将Xserver重定向到本地Windows.(需要注意IP是本地Windows的IP)</li>
+</ol>
+<pre><code>[root@zdx ~]# echo $DISPLAY
+
+[root@zdx ~]# export DISPLAY=10.0.0.1:0.0
+[root@zdx ~]# echo $DISPLAY
+10.0.0.1:0.0
+[root@zdx ~]# 
+</code></pre>
+<ol start="6">
+<li>接下来就可以运行图形化程序了.</li>
+</ol>
+<pre><code>[root@zdx ~]# firefox
+Running without a11y support!
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#linux%E7%B3%BB%E7%BB%9F%E7%9A%84%E5%9B%BE%E5%BD%A2%E5%8C%96%E7%95%8C%E9%9D%A2%E9%87%8D%E5%AE%9A%E5%90%91">Linux系统的图形化界面重定向</a>
+<ul>
+<li><a href="#%E5%AE%9E%E7%8E%B0%E7%9B%AE%E6%A0%87">实现目标:</a></li>
+<li><a href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83">实验环境</a></li>
+<li><a href="#%E5%8F%AF%E9%80%89%E6%93%8D%E4%BD%9C">可选操作</a></li>
+<li><a href="#%E5%AE%9E%E9%AA%8C%E6%AD%A5%E9%AA%A4">实验步骤</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://zhaid0ngxue.github.io/post/2021012601-gitee-zuo-tu-chuang/">
+              <h3 class="post-title">
+                2021012601 - gitee做图床
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  <a href="https://zhaid0ngxue.github.io/">回到首页</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:history.back(-1)">返回到上一个页面呦(本地缓存)</a>
+  <a class="rss" href="https://zhaid0ngxue.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
