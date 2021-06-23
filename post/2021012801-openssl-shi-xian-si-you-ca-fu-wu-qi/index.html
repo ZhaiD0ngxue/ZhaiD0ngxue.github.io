@@ -1,22 +1,95 @@
-<?xml version="1.0" encoding="utf-8"?>
-<feed xmlns="http://www.w3.org/2005/Atom">
-    <id>https://zhaid0ngxue.github.io</id>
-    <title>ZhaiD0ngxue&apos;s Blog.</title>
-    <updated>2021-06-23T05:41:01.641Z</updated>
-    <generator>https://github.com/jpmonette/feed</generator>
-    <link rel="alternate" href="https://zhaid0ngxue.github.io"/>
-    <link rel="self" href="https://zhaid0ngxue.github.io/atom.xml"/>
-    <subtitle>&lt;font color=red&gt; 学习?学个屁... &lt;/font&gt;</subtitle>
-    <logo>https://zhaid0ngxue.github.io/images/avatar.png</logo>
-    <icon>https://zhaid0ngxue.github.io/favicon.ico</icon>
-    <rights>All rights reserved 2021, ZhaiD0ngxue&apos;s Blog.</rights>
-    <entry>
-        <title type="html"><![CDATA[2021012801 - OpenSSL实现私有CA服务器]]></title>
-        <id>https://zhaid0ngxue.github.io/post/2021012801-openssl-shi-xian-si-you-ca-fu-wu-qi/</id>
-        <link href="https://zhaid0ngxue.github.io/post/2021012801-openssl-shi-xian-si-you-ca-fu-wu-qi/">
-        </link>
-        <updated>2021-06-23T05:40:43.000Z</updated>
-        <content type="html"><![CDATA[<p>my index node:2021012801</p>
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2021012801 - OpenSSL实现私有CA服务器 | ZhaiD0ngxue&#39;s Blog.</title>
+<link rel="shortcut icon" href="https://zhaid0ngxue.github.io/favicon.ico?v=1624426854198">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zhaid0ngxue.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="2021012801 - OpenSSL实现私有CA服务器 | ZhaiD0ngxue&#39;s Blog. - Atom Feed" href="https://zhaid0ngxue.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="my index node:2021012801
+done
+[toc]
+OpenSSL实现私有CA服务器
+实验环境
+此次实验系统采用CentOS8u3 minimal
+ubuntu的配置文件在/etc/ssl/openssl.cnf
+相关的..." />
+    <meta name="keywords" content="" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zhaid0ngxue.github.io">
+  <img class="avatar" src="https://zhaid0ngxue.github.io/images/avatar.png?v=1624426854198" alt="">
+  </a>
+  <h1 class="site-title">
+    ZhaiD0ngxue&#39;s Blog.
+  </h1>
+  <p class="site-description">
+    <font color=red> 学习?学个屁... </font>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              2021012801 - OpenSSL实现私有CA服务器
+            </h2>
+            <div class="post-info">
+              <span>
+                2021-06-23
+              </span>
+              <span>
+                32 min read
+              </span>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>my index node:2021012801</p>
 <p>done</p>
 <p>[toc]</p>
 <h1 id="openssl实现私有ca服务器">OpenSSL实现私有CA服务器</h1>
@@ -751,372 +824,117 @@ app.crt  app.csr  app.key  app.pem  Makefile
 [root@zdx data]# 
 
 </code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2021012602 - Linux系统的图形化界面重定向]]></title>
-        <id>https://zhaid0ngxue.github.io/post/2021012602-linux-xi-tong-de-tu-xing-hua-jie-mian-chong-ding-xiang/</id>
-        <link href="https://zhaid0ngxue.github.io/post/2021012602-linux-xi-tong-de-tu-xing-hua-jie-mian-chong-ding-xiang/">
-        </link>
-        <updated>2021-06-23T05:38:04.000Z</updated>
-        <content type="html"><![CDATA[<p>my index node:2021012602</p>
-<p>done</p>
-<p>[toc]</p>
-<h1 id="linux系统的图形化界面重定向">Linux系统的图形化界面重定向</h1>
-<h2 id="实现目标">实现目标:</h2>
-<p>远程服务器为命令行界面,通过ssh远程连接到主机后,运行图形化界面程序,将GUI重定向到本地电脑,程序正常运行.</p>
-<h2 id="实验环境">实验环境</h2>
-<p>CentOS7U9 minimal</p>
-<h2 id="可选操作">可选操作</h2>
-<ol>
-<li>服务器需要安装图形化界面</li>
-</ol>
-<pre><code>[root@zdx ~]# yum groupinstall &quot;GNOME Desktop&quot;
-</code></pre>
-<h2 id="实验步骤">实验步骤</h2>
-<ol>
-<li>本地Windows电脑安装Xming工具,如下步骤.<br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall1.png" alt="" loading="lazy"><br>
-修改安装路径<br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall2.png" alt="" loading="lazy"><br>
-修改安装的组件<br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall3.png" alt="" loading="lazy"><br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall4.png" alt="" loading="lazy"><br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall5.png" alt="" loading="lazy"><br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall6.png" alt="" loading="lazy"><br>
-可以先不启动Xming<br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminginstall7.png" alt="" loading="lazy"></li>
-<li>本地Windows电脑运行Xlaunch工具来启动Xming.<br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse1.png" alt="" loading="lazy"><br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse2.png" alt="" loading="lazy"><br>
-此处注意,需要勾选&quot;No Access Control&quot;<br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse3.png" alt="" loading="lazy"><br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse4.png" alt="" loading="lazy"></li>
-<li>在Windows的右下角托盘中查看到本地开启的窗口编号,如0.0<br>
-<img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012602/2021012602xminguse5.png" alt="" loading="lazy"></li>
-<li>确认连接到远程服务器的本地WindowsIP地址,如我的Windows的IP是10.0.0.1</li>
-<li>在远程服务器端执行如下命令,声明环境变量.将Xserver重定向到本地Windows.(需要注意IP是本地Windows的IP)</li>
-</ol>
-<pre><code>[root@zdx ~]# echo $DISPLAY
 
-[root@zdx ~]# export DISPLAY=10.0.0.1:0.0
-[root@zdx ~]# echo $DISPLAY
-10.0.0.1:0.0
-[root@zdx ~]# 
-</code></pre>
-<ol start="6">
-<li>接下来就可以运行图形化程序了.</li>
-</ol>
-<pre><code>[root@zdx ~]# firefox
-Running without a11y support!
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2021012601 - gitee做图床]]></title>
-        <id>https://zhaid0ngxue.github.io/post/2021012601-gitee-zuo-tu-chuang/</id>
-        <link href="https://zhaid0ngxue.github.io/post/2021012601-gitee-zuo-tu-chuang/">
-        </link>
-        <updated>2021-06-15T04:02:20.000Z</updated>
-        <content type="html"><![CDATA[<p>my index node:2021012601</p>
-<p>done</p>
-<p>[toc]</p>
-<h1 id="gitee做图床">gitee做图床</h1>
-<ol>
-<li>点击+号,创建一个公用仓库.</li>
-</ol>
-<figure data-type="image" tabindex="1"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc1.png" alt="" loading="lazy"></figure>
-<ol start="2">
-<li>如下配置即可.修改仓库名,设置为公开,使用readme初始化仓库.点击创建.</li>
-</ol>
-<figure data-type="image" tabindex="2"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc2.png" alt="" loading="lazy"></figure>
-<ol start="3">
-<li>复制链接.</li>
-</ol>
-<figure data-type="image" tabindex="3"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc3.png" alt="" loading="lazy"></figure>
-<ol start="4">
-<li>使用git工具将仓库拉取到本地</li>
-</ol>
-<figure data-type="image" tabindex="4"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc4.png" alt="" loading="lazy"></figure>
-<ol start="5">
-<li>在本地仓库中,按照自己的想法,划分目录结构,并将图片放置这对应目录下.</li>
-</ol>
-<figure data-type="image" tabindex="5"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc5.png" alt="" loading="lazy"></figure>
-<ol start="6">
-<li>推送本地的文件到gitee图床上.</li>
-</ol>
-<figure data-type="image" tabindex="6"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc6.png" alt="" loading="lazy"></figure>
-<ol start="7">
-<li>使用图床,链接书写方式如下.注意其中的raw/master/</li>
-</ol>
-<pre><code>![](https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc1.png)
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2021050401 - 编译安装nginx]]></title>
-        <id>https://zhaid0ngxue.github.io/post/2021050401-bian-yi-an-zhuang-nginx/</id>
-        <link href="https://zhaid0ngxue.github.io/post/2021050401-bian-yi-an-zhuang-nginx/">
-        </link>
-        <updated>2021-06-15T02:20:48.000Z</updated>
-        <content type="html"><![CDATA[<p>my index node: 2021050401</p>
-<p>[toc]</p>
-<h1 id="编译安装nginx">编译安装nginx</h1>
-<h2 id="规划说明">规划说明</h2>
-<pre><code>nginx-1.20.0.tar.gz
-</code></pre>
-<h2 id="准备相关支持文件">准备相关支持文件</h2>
-<pre><code>[root@c803-18 ~]# dnf -y install gcc pcre-devel zlib-devel make
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#openssl%E5%AE%9E%E7%8E%B0%E7%A7%81%E6%9C%89ca%E6%9C%8D%E5%8A%A1%E5%99%A8">OpenSSL实现私有CA服务器</a>
+<ul>
+<li><a href="#%E5%AE%9E%E9%AA%8C%E7%8E%AF%E5%A2%83">实验环境</a></li>
+<li><a href="#ca%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">CA配置文件</a></li>
+<li><a href="#rootca%E7%9A%84%E5%AE%9E%E7%8E%B0">rootCA的实现</a>
+<ul>
+<li><a href="#%E5%88%9B%E5%BB%BA%E7%9B%AE%E5%BD%95%E5%92%8C%E6%96%87%E4%BB%B6">创建目录和文件</a></li>
+<li><a href="#%E7%94%9F%E6%88%90ca%E7%9A%84%E7%A7%81%E9%92%A5">生成CA的私钥</a></li>
+<li><a href="#%E7%94%9F%E6%88%90ca%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6">生成CA自签名证书</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%88%96%E5%BA%94%E7%94%A8%E7%94%B3%E8%AF%B7%E8%AF%81%E4%B9%A6">客户端或应用申请证书</a>
+<ul>
+<li><a href="#%E7%94%9F%E6%88%90%E7%A7%81%E9%92%A5%E5%92%8C%E7%94%B3%E8%AF%B7%E6%96%87%E4%BB%B6">生成私钥和申请文件</a></li>
+<li><a href="#ca%E7%AD%BE%E5%8F%91%E8%AF%81%E4%B9%A6">CA签发证书</a></li>
+</ul>
+</li>
+<li><a href="#%E5%90%8A%E9%94%80%E8%AF%81%E4%B9%A6">吊销证书</a>
+<ul>
+<li><a href="#%E9%A6%96%E5%85%88%E6%98%8E%E7%A1%AE%E8%A6%81%E5%90%8A%E9%94%80%E8%AF%81%E4%B9%A6%E7%9A%84serial">首先明确要吊销证书的serial</a></li>
+<li><a href="#%E5%90%8A%E9%94%80%E8%AF%81%E4%B9%A6-2">吊销证书</a></li>
+<li><a href="#%E6%9B%B4%E6%96%B0%E5%90%8A%E9%94%80%E5%88%97%E8%A1%A8%E4%BB%A5%E5%85%AC%E7%A4%BA">更新吊销列表以公示</a></li>
+<li><a href="#%E6%9F%A5%E7%9C%8B">查看</a></li>
+</ul>
+</li>
+<li><a href="#%E7%96%91%E9%97%AE">疑问</a></li>
+<li><a href="#%E5%B0%8F%E6%8A%80%E5%B7%A7">小技巧</a>
+<ul>
+<li><a href="#%E4%B8%80%E6%AC%A1%E6%80%A7%E7%94%9F%E6%88%90%E7%A7%81%E9%92%A5%E5%92%8C%E8%87%AA%E7%AD%BE%E5%90%8D%E8%AF%81%E4%B9%A6">一次性生成私钥和自签名证书</a></li>
+<li><a href="#%E5%A5%BD%E7%94%A8%E7%9A%84makefile%E6%96%87%E4%BB%B6">好用的Makefile文件</a>
+<ul>
+<li><a href="#%E4%BD%BF%E7%94%A8">使用</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
-</code></pre>
-<h2 id="解压并编译安装">解压并编译安装</h2>
-<pre><code>[root@c803-18 ~]# tar xvf nginx-1.20.0.tar.gz  -C /usr/local/src/
-[root@c803-18 ~]# cd /usr/local/src/nginx-1.20.0/
-[root@c803-18 nginx-1.20.0]# ./configure --prefix=/app/nginx --user=nginx --group=nginx 
-[root@c803-18 nginx-1.20.0]# make 
-[root@c803-18 nginx-1.20.0]# make install 
+              </div>
+            </div>
+          </article>
+        </div>
 
-</code></pre>
-<h2 id="创建用户和组">创建用户和组</h2>
-<pre><code>[root@c803-18 ~]# groupadd -r -g 80 nginx
-[root@c803-18 ~]# useradd -r -g 80 -u 80 nginx
-[root@c803-18 ~]# chown -R nginx:nginx /app/nginx/
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://zhaid0ngxue.github.io/post/2021012602-linux-xi-tong-de-tu-xing-hua-jie-mian-chong-ding-xiang/">
+              <h3 class="post-title">
+                2021012602 - Linux系统的图形化界面重定向
+              </h3>
+            </a>
+          </div>
+        
 
-</code></pre>
-<h2 id="添加环境变量">添加环境变量</h2>
-<pre><code>[root@c803-18 ~]# echo 'PATH=/app/nginx/sbin:$PATH' &gt; /etc/profile.d/nginx.sh
-[root@c803-18 ~]# source /etc/profile.d/nginx.sh 
+        
 
-</code></pre>
-<h2 id="添加启动配置">添加启动配置</h2>
-<pre><code>[root@c803-18 ~]# vim /usr/lib/systemd/system/nginx.service
+        <div class="site-footer">
+  <a href="https://zhaid0ngxue.github.io/">回到首页</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:history.back(-1)">返回到上一个页面呦(本地缓存)</a>
+  <a class="rss" href="https://zhaid0ngxue.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
 
-[Unit]
-Description=The nginx HTTP and reverse proxy server
-After=network.target remote-fs.target nss-lookup.target
+      </div>
+    </div>
 
-[Service]
-Type=forking
-PIDFile=/app/nginx/logs/nginx.pid
-ExecStartPre=/usr/bin/rm -f /app/nginx/logs/nginx.pid
-ExecStartPre=/app/nginx/sbin/nginx -t
-ExecStart=/app/nginx/sbin/nginx
-ExecReload=/bin/kill -s HUP $MAINPID
-KillSignal=SIGQUIT
-TimeoutStopSec=5
-KillMode=mixed
-PrivateTmp=true
+    <script>
+      hljs.initHighlightingOnLoad()
 
-[Install]
-WantedBy=multi-user.target
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
 
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
 
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
 
-</code></pre>
-<h2 id="启动和验证">启动和验证</h2>
-<pre><code>[root@c803-18 ~]# systemctl daemon-reload
-[root@c803-18 ~]# systemctl enable --now nginx.service
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
 
-[root@c803-18 ~]# nginx -V
-nginx version: nginx/1.20.0
-built by gcc 8.3.1 20191121 (Red Hat 8.3.1-5) (GCC) 
-configure arguments: --prefix=/app/nginx --user=nginx --group=nginx
-[root@c803-18 ~]# 
-
-</code></pre>
-<h2 id="更多的编译参数">更多的编译参数</h2>
-<pre><code># yum安装的就是这么多编译参数
---prefix=/usr/share/nginx --sbin-path=/usr/sbin/nginx --modules-path=/usr/lib64/nginx/modules --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log --http-client-body-temp-path=/var/lib/nginx/tmp/client_body --http-proxy-temp-path=/var/lib/nginx/tmp/proxy --http-fastcgi-temp-path=/var/lib/nginx/tmp/fastcgi --http-uwsgi-temp-path=/var/lib/nginx/tmp/uwsgi --http-scgi-temp-path=/var/lib/nginx/tmp/scgi --pid-path=/run/nginx.pid --lock-path=/run/lock/subsys/nginx --user=nginx --group=nginx --with-file-aio --with-ipv6 --with-http_ssl_module --with-http_v2_module --with-http_realip_module --with-http_addition_module --with-http_xslt_module=dynamic --with-http_image_filter_module=dynamic --with-http_sub_module --with-http_dav_module --with-http_flv_module --with-http_mp4_module --with-http_gunzip_module --with-http_gzip_static_module --with-http_random_index_module --with-http_secure_link_module --with-http_degradation_module --with-http_slice_module --with-http_stub_status_module --with-http_perl_module=dynamic --with-http_auth_request_module --with-mail=dynamic --with-mail_ssl_module --with-pcre --with-pcre-jit --with-stream=dynamic --with-stream_ssl_module --with-debug --with-cc-opt='-O2 -g -pipe -Wall -Werror=format-security -Wp,-D_FORTIFY_SOURCE=2 -Wp,-D_GLIBCXX_ASSERTIONS -fexceptions -fstack-protector-strong -grecord-gcc-switches -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1 -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1 -m64 -mtune=generic -fasynchronous-unwind-tables -fstack-clash-protection -fcf-protection' --with-ld-opt='-Wl,-z,relro -Wl,-z,now -specs=/usr/lib/rpm/redhat/redhat-hardened-ld -Wl,-E'
-
-# 线程池
---with-threads
-
-# aio/directio
---with-file-aio
-
-# 状态页
---with-http_stub_status_module
-
-# 添加第三方的模块
-# 以echo模块为例,该模块可用于调试使用,https://github.com/openresty/echo-nginx-module
---add-module=/root/echo-nginx-module-0.62
-
-# 开启SSL
-# 需要[root@c803-18 ~]# dnf -y install perl-devel
---with-http_ssl_module --with-openssl=/usr/local/src/openssl-1.1.1k
-
-# 开启TCP/UDP的代理模块
---with-stream
-</code></pre>
-<h2 id="修改nginx版本信息">修改nginx版本信息</h2>
-<pre><code># 修改源码文件中如下三处后,重新编译即可
-
-[root@c803-18 nginx-1.20.0]# vim src/core/nginx.h 
-...
-#define NGINX_VERSION      &quot;2.31.1&quot;
-#define NGINX_MY      &quot;zengine&quot;
-#define NGINX_VER         NGINX_MY &quot;/&quot; NGINX_VERSION
-...
-
-[root@c803-18 nginx-1.20.0]# vim src/http/ngx_http_header_filter_module.c 
-...
-static u_char ngx_http_server_string[] = &quot;Server: &quot; NGINX_MY CRLF;
-...
-
-[root@c803-18 nginx-1.20.0]# vim src/http/ngx_http_special_response.c 
-...
-static u_char ngx_http_error_tail[] =
-&quot;&lt;hr&gt;&lt;center&gt;&quot; NGINX_VER &quot;&lt;/center&gt;&quot; CRLF
-&quot;&lt;/body&gt;&quot; CRLF
-&quot;&lt;/html&gt;&quot; CRLF
-;
-...
-
-</code></pre>
-<h2 id="install_nginxsh">install_nginx.sh</h2>
-<pre><code>#!/bin/bash
-curl -O http://10.0.0.1:65533/chfs/shared/nginx/nginx-1.20.0.tar.gz
-dnf -y install gcc pcre-devel zlib-devel make
-tar xvf nginx-1.20.0.tar.gz
-cd nginx-1.20.0
-./configure --prefix=/app/nginx --user=nginx --group=nginx
-make
-make install
-groupadd -r -g 80 nginx
-useradd -r -g 80 -u 80 nginx
-chown -R nginx:nginx /app/nginx/
-echo 'PATH=/app/nginx/sbin:$PATH' &gt; /etc/profile.d/nginx.sh
-source /etc/profile.d/nginx.sh 
-cat &gt; /usr/lib/systemd/system/nginx.service &lt;&lt; EOF
-[Unit]
-Description=The nginx HTTP and reverse proxy server
-After=network.target remote-fs.target nss-lookup.target
-
-[Service]
-Type=forking
-PIDFile=/app/nginx/logs/nginx.pid
-ExecStartPre=/usr/bin/rm -f /app/nginx/logs/nginx.pid
-ExecStartPre=/app/nginx/sbin/nginx -t
-ExecStart=/app/nginx/sbin/nginx
-ExecReload=/bin/kill -s HUP \$MAINPID
-KillSignal=SIGQUIT
-TimeoutStopSec=5
-KillMode=mixed
-PrivateTmp=true
-
-[Install]
-WantedBy=multi-user.target
-EOF
-systemctl daemon-reload
-systemctl enable --now nginx.service
-nginx -V
-</code></pre>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[2021041901 - 编译安装php-8.0.3]]></title>
-        <id>https://zhaid0ngxue.github.io/post/2021041901-bian-yi-an-zhuang-php-803/</id>
-        <link href="https://zhaid0ngxue.github.io/post/2021041901-bian-yi-an-zhuang-php-803/">
-        </link>
-        <updated>2021-06-15T02:07:33.000Z</updated>
-        <content type="html"><![CDATA[<p>my index node: 2021041901</p>
-<p>[toc]</p>
-<h1 id="编译安装php-803">编译安装php-8.0.3</h1>
-<h2 id="规划说明">规划说明</h2>
-<pre><code>php-8.0.3.tar.gz
-</code></pre>
-<h2 id="依赖">依赖</h2>
-<pre><code>[root@c803-58 ~]# dnf -y install gcc libxml2-devel sqlite-devel make
-
-</code></pre>
-<h2 id="编译安装">编译安装</h2>
-<pre><code>[root@c803-58 ~]# tar xvf php-8.0.3.tar.gz 
-[root@c803-58 ~]# cd php-8.0.3
-# 这里只是最基本的config配置项,按需添加即可
-[root@c803-58 php-8.0.3]# ./configure --prefix=/usr/local/php --enable-fpm --with-config-file-path=/etc --with-config-file-scan-dir=/etc/php.d
-[root@c803-58 php-8.0.3]# make
-[root@c803-58 php-8.0.3]# make install
-
-</code></pre>
-<h2 id="添加用户">添加用户</h2>
-<pre><code>[root@c803-58 ~]# groupadd -r -g 8000 php
-[root@c803-58 ~]# useradd -r -g 8000 -u 8000 php
-[root@c803-58 ~]# chown -R php:php /usr/local/php/
-</code></pre>
-<h2 id="配置">配置</h2>
-<pre><code>[root@c803-58 ~]# cd php-8.0.3
-[root@c803-58 php-8.0.3]# cp -av php.ini-production /etc/php.ini
-[root@c803-58 php-8.0.3]# cd /usr/local/php/etc/
-[root@c803-58 etc]# cp -av php-fpm.conf.default php-fpm.conf
-[root@c803-58 etc]# cp -av php-fpm.d/www.conf.default php-fpm.d/www.conf
-[root@c803-58 ~]# vim /usr/local/php/etc/php-fpm.conf
-
-;error_log = log/php-fpm.log
-error_log = log/php-fpm.log
-
-[root@c803-58 ~]# vim /usr/local/php/etc/php-fpm.d/www.conf
-
-user = php
-group = php
-listen = 0.0.0.0:8000
-
-
-</code></pre>
-<h2 id="opcache加速">opcache加速</h2>
-<pre><code>[root@c803-58 ~]# vim /etc/php.ini 
-
-[opcache]
-opcache.enable=1
-zend_extension=opcache.so
-
-</code></pre>
-<h2 id="环境变量">环境变量</h2>
-<pre><code>[root@c803-58 ~]# echo 'PATH=/usr/local/php/bin/:$PATH' &gt; /etc/profile.d/php.sh
-[root@c803-58 ~]# source /etc/profile.d/php.sh
-
-</code></pre>
-<h2 id="启动服务">启动服务</h2>
-<pre><code>[root@c803-58 ~]# cd php-8.0.3
-[root@c803-58 php-8.0.3]# cp -av sapi/fpm/php-fpm.service /usr/lib/systemd/system
-
-# 需要修改,否则无法启动,/var/log/messages中会有如下报错
-# Apr 19 10:58:53 c803-58 php-fpm[105484]: [19-Apr-2021 10:58:53] ERROR: failed to open error_log (/usr/local/php/var/log/php-fpm.log): Read-only file system (30)
-[root@c803-58 ~]# vim /usr/lib/systemd/system/php-fpm.service 
-
-#ProtectSystem=full
-ProtectSystem=false
-
-[root@c803-58 ~]# systemctl daemon-reload
-[root@c803-58 ~]# systemctl start php-fpm
-
-</code></pre>
-<h2 id="httpd">httpd</h2>
-<pre><code>[root@c803-58 ~]# dnf -y install httpd
-[root@c803-58 ~]# vim /var/www/html/info.php
-
-&lt;?php
-phpinfo();
-?&gt;
-
-[root@c803-58 ~]# vim /etc/httpd/conf.d/test.conf 
-
-DirectoryIndex index.php
-ProxyRequests Off
-ProxyPassMatch ^/(.*\.php)$ unix:/var/run/php.sock|fcgi://127.0.0.1:8000/var/www/html/$1
-
-
-[root@c803-58 ~]# systemctl start httpd
-[root@c803-58 ~]# curl -I localhost/info.php
-HTTP/1.1 200 OK
-Date: Mon, 19 Apr 2021 03:17:14 GMT
-Server: Apache/2.4.37 (centos)
-X-Powered-By: PHP/8.0.3
-Content-Type: text/html; charset=UTF-8
-
-[root@c803-58 ~]# 
-
-# 或者浏览器访问 http://10.0.0.58/info.php
-</code></pre>
-]]></content>
-    </entry>
-</feed>
+    </script>
+  </body>
+</html>
