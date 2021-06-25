@@ -2,12 +2,11 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhaid0ngxue.github.io</id>
     <title>ZhaiD0ngxue&apos;s Blog.</title>
-    <updated>2021-06-25T08:42:53.358Z</updated>
+    <updated>2021-06-25T08:43:42.147Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhaid0ngxue.github.io"/>
     <link rel="self" href="https://zhaid0ngxue.github.io/atom.xml"/>
-    <subtitle>
-&lt;marquee width=400 behavior=alternate direction=left align=middle&gt;&lt;font color=red&gt; 学习?学个屁... &lt;/font&gt;&lt;/marquee&gt;</subtitle>
+    <subtitle>&lt;marquee width=400 behavior=alternate direction=left align=middle&gt;&lt;font color=red&gt; 学习?学个屁... &lt;/font&gt;&lt;/marquee&gt;</subtitle>
     <logo>https://zhaid0ngxue.github.io/images/avatar.png</logo>
     <icon>https://zhaid0ngxue.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, ZhaiD0ngxue&apos;s Blog.</rights>
