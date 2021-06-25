@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://zhaid0ngxue.github.io</id>
     <title>ZhaiD0ngxue&apos;s Blog.</title>
-    <updated>2021-06-23T05:45:33.035Z</updated>
+    <updated>2021-06-25T08:32:17.193Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://zhaid0ngxue.github.io"/>
     <link rel="self" href="https://zhaid0ngxue.github.io/atom.xml"/>
@@ -10,6 +10,31 @@
     <logo>https://zhaid0ngxue.github.io/images/avatar.png</logo>
     <icon>https://zhaid0ngxue.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, ZhaiD0ngxue&apos;s Blog.</rights>
+    <entry>
+        <title type="html"><![CDATA[2021020801 - Linux下字符集编码转换方法]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021020801-linux-xia-zi-fu-ji-bian-ma-zhuan-huan-fang-fa/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021020801-linux-xia-zi-fu-ji-bian-ma-zhuan-huan-fang-fa/">
+        </link>
+        <updated>2021-06-25T08:28:22.000Z</updated>
+        <content type="html"><![CDATA[<p>my index node:2021020801</p>
+<p>done</p>
+<pre><code>iconv -f gb2312 -t utf8 tessss.txt -o win.txt    #将gb2312字符集格式的tessss.txt文档转换为utf8格式,并命名为win.txt  
+
+[root@wang data]# file tessss.txt 
+tessss.txt: ISO-8859 text, with no line terminators
+[root@wang data]# file win.txt 
+win.txt: UTF-8 Unicode text, with no line terminators
+[root@wang data]#
+
+
+iconv -l		#显示支持字符集编码的列表
+</code></pre>
+<p>-f	原始的字符集<br>
+-t	要转换的字符集<br>
+-o	输出的文件名</p>
+<p>找时间再研究研究,好像还是不太懂</p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[2021012801 - OpenSSL实现私有CA服务器]]></title>
         <id>https://zhaid0ngxue.github.io/post/2021012801-openssl-shi-xian-si-you-ca-fu-wu-qi/</id>

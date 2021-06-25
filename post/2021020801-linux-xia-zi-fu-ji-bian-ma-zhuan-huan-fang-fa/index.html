@@ -2,33 +2,18 @@
   <head>
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>2021012601 - gitee做图床 | ZhaiD0ngxue&#39;s Blog.</title>
+<title>2021020801 - Linux下字符集编码转换方法 | ZhaiD0ngxue&#39;s Blog.</title>
 <link rel="shortcut icon" href="https://zhaid0ngxue.github.io/favicon.ico?v=1624609716887">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://zhaid0ngxue.github.io/styles/main.css">
-<link rel="alternate" type="application/atom+xml" title="2021012601 - gitee做图床 | ZhaiD0ngxue&#39;s Blog. - Atom Feed" href="https://zhaid0ngxue.github.io/atom.xml">
+<link rel="alternate" type="application/atom+xml" title="2021020801 - Linux下字符集编码转换方法 | ZhaiD0ngxue&#39;s Blog. - Atom Feed" href="https://zhaid0ngxue.github.io/atom.xml">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
 
 
 
-    <meta name="description" content="my index node:2021012601
+    <meta name="description" content="my index node:2021020801
 done
-[toc]
-gitee做图床
-
-点击+号,创建一个公用仓库.
-
-
-
-如下配置即可.修改仓库名,设置为公开,使用readme初始化仓库.点击创建.
-
-
-
-复制链接.
-
-
-
-使用git..." />
+iconv -f gb2312 -t utf8 tessss.txt -o win.txt    #将gb2312字符集格式的tessss.txt文档转换为utf8格式,并命名为w..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -85,11 +70,11 @@ gitee做图床
         <div class="post-detail">
           <article class="post">
             <h2 class="post-title">
-              2021012601 - gitee做图床
+              2021020801 - Linux下字符集编码转换方法
             </h2>
             <div class="post-info">
               <span>
-                2021-06-15
+                2021-06-25
               </span>
               <span>
                 1 min read
@@ -99,46 +84,27 @@ gitee做图床
             
             <div class="post-content-wrapper">
               <div class="post-content">
-                <p>my index node:2021012601</p>
+                <p>my index node:2021020801</p>
 <p>done</p>
-<p>[toc]</p>
-<h1 id="gitee做图床">gitee做图床</h1>
-<ol>
-<li>点击+号,创建一个公用仓库.</li>
-</ol>
-<figure data-type="image" tabindex="1"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc1.png" alt="" loading="lazy"></figure>
-<ol start="2">
-<li>如下配置即可.修改仓库名,设置为公开,使用readme初始化仓库.点击创建.</li>
-</ol>
-<figure data-type="image" tabindex="2"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc2.png" alt="" loading="lazy"></figure>
-<ol start="3">
-<li>复制链接.</li>
-</ol>
-<figure data-type="image" tabindex="3"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc3.png" alt="" loading="lazy"></figure>
-<ol start="4">
-<li>使用git工具将仓库拉取到本地</li>
-</ol>
-<figure data-type="image" tabindex="4"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc4.png" alt="" loading="lazy"></figure>
-<ol start="5">
-<li>在本地仓库中,按照自己的想法,划分目录结构,并将图片放置这对应目录下.</li>
-</ol>
-<figure data-type="image" tabindex="5"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc5.png" alt="" loading="lazy"></figure>
-<ol start="6">
-<li>推送本地的文件到gitee图床上.</li>
-</ol>
-<figure data-type="image" tabindex="6"><img src="https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc6.png" alt="" loading="lazy"></figure>
-<ol start="7">
-<li>使用图床,链接书写方式如下.注意其中的raw/master/</li>
-</ol>
-<pre><code>![](https://gitee.com/zhaid0ngxue/giteepics/raw/master/pics/2021012601/2021012601tc1.png)
+<pre><code>iconv -f gb2312 -t utf8 tessss.txt -o win.txt    #将gb2312字符集格式的tessss.txt文档转换为utf8格式,并命名为win.txt  
+
+[root@wang data]# file tessss.txt 
+tessss.txt: ISO-8859 text, with no line terminators
+[root@wang data]# file win.txt 
+win.txt: UTF-8 Unicode text, with no line terminators
+[root@wang data]#
+
+
+iconv -l		#显示支持字符集编码的列表
 </code></pre>
+<p>-f	原始的字符集<br>
+-t	要转换的字符集<br>
+-o	输出的文件名</p>
+<p>找时间再研究研究,好像还是不太懂</p>
 
               </div>
               <div class="toc-container">
-                <ul class="markdownIt-TOC">
-<li><a href="#gitee%E5%81%9A%E5%9B%BE%E5%BA%8A">gitee做图床</a></li>
-</ul>
-
+                
               </div>
             </div>
           </article>
@@ -147,9 +113,9 @@ gitee做图床
         
           <div class="next-post">
             <div class="next">下一篇</div>
-            <a href="https://zhaid0ngxue.github.io/post/2021050401-bian-yi-an-zhuang-nginx/">
+            <a href="https://zhaid0ngxue.github.io/post/2021012801-openssl-shi-xian-si-you-ca-fu-wu-qi/">
               <h3 class="post-title">
-                2021050401 - 编译安装nginx
+                2021012801 - OpenSSL实现私有CA服务器
               </h3>
             </a>
           </div>
