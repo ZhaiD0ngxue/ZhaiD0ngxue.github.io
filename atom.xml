@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://zhaid0ngxue.github.io</id>
+    <title>ZhaiD0ngxue&apos;s Blog.</title>
+    <updated>2023-11-12T13:37:57.555Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://zhaid0ngxue.github.io"/>
+    <link rel="self" href="https://zhaid0ngxue.github.io/atom.xml"/>
+    <subtitle>&lt;marquee width=400 behavior=alternate direction=left align=middle&gt;&lt;font color=#dee2e6&gt; 学点东西总没错... &lt;/font&gt;&lt;/marquee&gt;</subtitle>
+    <logo>https://zhaid0ngxue.github.io/images/avatar.png</logo>
+    <icon>https://zhaid0ngxue.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2023, ZhaiD0ngxue&apos;s Blog.</rights>
+    <entry>
+        <title type="html"><![CDATA[2021021301 - DNS综合实验]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021021301-dns-zong-he-shi-yan/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021021301-dns-zong-he-shi-yan/">
+        </link>
+        <updated>2023-11-12T13:36:53.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2021021201 - DNS服务搭建]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021021201-dns-fu-wu-da-jian/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021021201-dns-fu-wu-da-jian/">
+        </link>
+        <updated>2023-11-12T13:36:30.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2022031702 - httpd搭建webdav]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2022031702-httpd-da-jian-webdav/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2022031702-httpd-da-jian-webdav/">
+        </link>
+        <updated>2023-11-12T13:32:55.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2021031101 - apache2实现https案例]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021031101-apache2-shi-xian-https-an-li/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021031101-apache2-shi-xian-https-an-li/">
+        </link>
+        <updated>2023-11-12T13:32:35.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2021030903 - Ubuntu2004编译安装apache2---分步编译]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021030903-ubuntu2004-bian-yi-an-zhuang-apache2-fen-bu-bian-yi/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021030903-ubuntu2004-bian-yi-an-zhuang-apache2-fen-bu-bian-yi/">
+        </link>
+        <updated>2023-11-12T13:32:14.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2021030902 - centOS8u3编译安装httpd-2.4---统一编译]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021030902-centos8u3-bian-yi-an-zhuang-httpd-24-tong-yi-bian-yi/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021030902-centos8u3-bian-yi-an-zhuang-httpd-24-tong-yi-bian-yi/">
+        </link>
+        <updated>2023-11-12T13:31:45.000Z</updated>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[2021030901 - centOS8u3编译安装httpd-2.4---分步编译]]></title>
+        <id>https://zhaid0ngxue.github.io/post/2021030901-centos8u3-bian-yi-an-zhuang-httpd-24-fen-bu-bian-yi/</id>
+        <link href="https://zhaid0ngxue.github.io/post/2021030901-centos8u3-bian-yi-an-zhuang-httpd-24-fen-bu-bian-yi/">
+        </link>
+        <updated>2023-11-12T13:30:39.000Z</updated>
+    </entry>
+</feed>

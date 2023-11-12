@@ -1,0 +1,241 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2021030901 - centOS8u3编译安装httpd-2.4---分步编译 | ZhaiD0ngxue&#39;s Blog.</title>
+<link rel="shortcut icon" href="https://zhaid0ngxue.github.io/favicon.ico?v=1699796227965">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zhaid0ngxue.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="2021030901 - centOS8u3编译安装httpd-2.4---分步编译 | ZhaiD0ngxue&#39;s Blog. - Atom Feed" href="https://zhaid0ngxue.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="my index node: 2021030901
+done
+[toc]
+centOS8u3编译安装httpd-2.4---分步编译
+相关源码包准备
+[root@c803-18 ~]# wget -c https://mirrors.bfs..." />
+    <meta name="keywords" content="运维体系-ApacheHttp" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zhaid0ngxue.github.io">
+  <img class="avatar" src="https://zhaid0ngxue.github.io/images/avatar.png?v=1699796227965" alt="">
+  </a>
+  <h1 class="site-title">
+    ZhaiD0ngxue&#39;s Blog.
+  </h1>
+  <p class="site-description">
+    <marquee width=400 behavior=alternate direction=left align=middle><font color=#dee2e6> 学点东西总没错... </font></marquee>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="https://zhaid0ngxue.github.io/post/lian-xi-fang-shi" class="menu">
+          联系我
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              2021030901 - centOS8u3编译安装httpd-2.4---分步编译
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-11-12
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://zhaid0ngxue.github.io/tag/oMeZL9uVb/" class="post-tag">
+                  # 运维体系-ApacheHttp
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>my index node: 2021030901</p>
+<p>done</p>
+<p>[toc]</p>
+<h1 id="centos8u3编译安装httpd-24-分步编译">centOS8u3编译安装httpd-2.4---分步编译</h1>
+<h2 id="相关源码包准备">相关源码包准备</h2>
+<pre><code>[root@c803-18 ~]# wget -c https://mirrors.bfsu.edu.cn/apache//httpd/httpd-2.4.46.tar.gz
+[root@c803-18 ~]# wget -c https://mirrors.tuna.tsinghua.edu.cn/apache//apr/apr-1.7.0.tar.gz
+[root@c803-18 ~]# wget -c https://mirrors.tuna.tsinghua.edu.cn/apache//apr/apr-util-1.6.1.tar.gz
+
+</code></pre>
+<h2 id="安装相关支持库文件">安装相关支持库文件</h2>
+<pre><code>[root@c803-18 ~]# dnf -y install gcc make expat-devel pcre-devel libxml2-devel
+
+</code></pre>
+<h2 id="解压">解压</h2>
+<pre><code>[root@c803-18 ~]# tar xvf apr-1.7.0.tar.gz 
+[root@c803-18 ~]# tar xvf apr-util-1.6.1.tar.gz 
+[root@c803-18 ~]# tar xvf httpd-2.4.46.tar.gz 
+</code></pre>
+<h2 id="编译apr">编译apr</h2>
+<pre><code>[root@c803-18 ~]# cd apr-1.7.0
+[root@c803-18 apr-1.7.0]# ./configure --prefix=/usr/local/apr
+[root@c803-18 apr-1.7.0]# make 
+[root@c803-18 apr-1.7.0]# make install
+</code></pre>
+<h2 id="编译apr-util">编译apr-util</h2>
+<pre><code>[root@c803-18 ~]# cd apr-util-1.6.1
+[root@c803-18 apr-util-1.6.1]# ./configure --prefix=/usr/local/apr-util --with-apr=/usr/local/apr/
+[root@c803-18 apr-util-1.6.1]# make
+[root@c803-18 apr-util-1.6.1]# make install
+</code></pre>
+<h2 id="编译httpd">编译httpd</h2>
+<pre><code>[root@c803-18 ~]# cd httpd-2.4.46
+[root@c803-18 httpd-2.4.46]# ./configure --prefix=/usr/local/httpd --with-apr=/usr/local/apr --with-apr-util=/usr/local/apr-util 
+[root@c803-18 httpd-2.4.46]# make 
+[root@c803-18 httpd-2.4.46]# make install
+
+</code></pre>
+<h2 id="添加环境变量">添加环境变量</h2>
+<pre><code>[root@c803-18 ~]# echo 'PATH=/usr/local/httpd/bin/:$PATH' &gt; /etc/profile.d/httpd.sh
+[root@c803-18 ~]# source /etc/profile.d/httpd.sh
+
+</code></pre>
+<h2 id="添加用户">添加用户</h2>
+<pre><code>[root@c803-18 ~]# groupadd -r -g 80 apache
+[root@c803-18 ~]# useradd -r -g 80 -u 80 apache
+
+</code></pre>
+<h2 id="修改启动用户配置">修改启动用户配置</h2>
+<pre><code>[root@c803-18 ~]# vim /usr/local/httpd/conf/httpd.conf 
+
+User apache
+Group apache
+</code></pre>
+<h2 id="启动服务">启动服务</h2>
+<pre><code>[root@c803-18 ~]# apachectl start
+# 停止服务
+[root@c803-18 ~]# apachectl stop
+[root@c803-18 ~]# apachectl restart
+
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#centos8u3%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85httpd-24-%E5%88%86%E6%AD%A5%E7%BC%96%E8%AF%91">centOS8u3编译安装httpd-2.4---分步编译</a>
+<ul>
+<li><a href="#%E7%9B%B8%E5%85%B3%E6%BA%90%E7%A0%81%E5%8C%85%E5%87%86%E5%A4%87">相关源码包准备</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E7%9B%B8%E5%85%B3%E6%94%AF%E6%8C%81%E5%BA%93%E6%96%87%E4%BB%B6">安装相关支持库文件</a></li>
+<li><a href="#%E8%A7%A3%E5%8E%8B">解压</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91apr">编译apr</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91apr-util">编译apr-util</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91httpd">编译httpd</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">添加环境变量</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E7%94%A8%E6%88%B7">添加用户</a></li>
+<li><a href="#%E4%BF%AE%E6%94%B9%E5%90%AF%E5%8A%A8%E7%94%A8%E6%88%B7%E9%85%8D%E7%BD%AE">修改启动用户配置</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1">启动服务</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+
+        
+
+        <div class="site-footer">
+  <a href="https://zhaid0ngxue.github.io/">回到首页</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:history.back(-1)">返回到上一个页面呦(本地缓存)</a>
+  <a class="rss" href="https://zhaid0ngxue.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,271 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2021031101 - apache2实现https案例 | ZhaiD0ngxue&#39;s Blog.</title>
+<link rel="shortcut icon" href="https://zhaid0ngxue.github.io/favicon.ico?v=1699796227965">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zhaid0ngxue.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="2021031101 - apache2实现https案例 | ZhaiD0ngxue&#39;s Blog. - Atom Feed" href="https://zhaid0ngxue.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="my index node: 2021031101
+done
+[toc]
+apache2实现https案例
+准备证书
+
+模拟使用自建CA颁发证书，生产中应使用公认的证书机构颁发的证书文件
+此处参考文档 《2021022503 - 使用eas..." />
+    <meta name="keywords" content="运维体系-ApacheHttp" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zhaid0ngxue.github.io">
+  <img class="avatar" src="https://zhaid0ngxue.github.io/images/avatar.png?v=1699796227965" alt="">
+  </a>
+  <h1 class="site-title">
+    ZhaiD0ngxue&#39;s Blog.
+  </h1>
+  <p class="site-description">
+    <marquee width=400 behavior=alternate direction=left align=middle><font color=#dee2e6> 学点东西总没错... </font></marquee>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="https://zhaid0ngxue.github.io/post/lian-xi-fang-shi" class="menu">
+          联系我
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              2021031101 - apache2实现https案例
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-11-12
+              </span>
+              <span>
+                3 min read
+              </span>
+              
+                <a href="https://zhaid0ngxue.github.io/tag/oMeZL9uVb/" class="post-tag">
+                  # 运维体系-ApacheHttp
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>my index node: 2021031101</p>
+<p>done</p>
+<p>[toc]</p>
+<h1 id="apache2实现https案例">apache2实现https案例</h1>
+<h2 id="准备证书">准备证书</h2>
+<blockquote>
+<p>模拟使用自建CA颁发证书，生产中应使用公认的证书机构颁发的证书文件<br>
+此处参考文档 《2021022503 - 使用easy-rsa工具快速创建证书和密钥》</p>
+</blockquote>
+<pre><code># 创建个目录，统一管理证书文件
+[root@c803-18 ~]# mkdir -p /etc/myhttpdhostcert
+[root@c803-18 ~]# cp -av easy-rsa-server/3/pki/ca.crt /etc/myhttpdhostcert/
+[root@c803-18 ~]# cp -av easy-rsa-server/3/pki/private/myhttpdhost.key /etc/myhttpdhostcert/
+[root@c803-18 ~]# cp -av easy-rsa-server/3/pki/issued/myhttpdhost.crt /etc/myhttpdhostcert/
+
+[root@c803-18 ~]# chown -R apache.apache /etc/myhttpdhostcert/
+[root@c803-18 ~]# chmod -R 600 /etc/myhttpdhostcert/
+
+
+# 实际生成环境中,申请的SSL证书通常是二级机构颁发,会包括,crt,key和chain文件
+# crt和key文件不赘述
+# 这个chain文件,实际是二级机构的证书,用来描述证明二级颁发机构和根CA之间的关系
+
+# 因为本文档是模拟实验,证书颁发机构就是自建根CA,所以和生产环境中有一定差异,注意修改后面的配置文件.
+</code></pre>
+<h2 id="安装apache2-httpd服务并修改相关配置">安装apache2 httpd服务并修改相关配置</h2>
+<pre><code># 默认dnf安装的httpd没有ssl模块，需要单独安装个包
+[root@c803-18 ~]# dnf -y install httpd mod_ssl
+
+# 确认相关模块已加载
+[root@c803-18 ~]# httpd -M | grep ssl_mod
+ ssl_module (shared)
+[root@c803-18 httpd]# httpd -M | grep socache_shmcb
+ socache_shmcb_module (shared)
+
+# 修改相关配置
+[root@c803-18 ~]# vim /etc/httpd/conf.d/ssl.conf 
+
+SSLCertificateFile /etc/myhttpdhostcert/myhttpdhost.crt
+SSLCertificateKeyFile /etc/myhttpdhostcert/myhttpdhost.key
+SSLCertificateChainFile /etc/myhttpdhostcert/ca.crt		# 这个配置注意
+
+</code></pre>
+<h2 id="启动服务并验证">启动服务并验证</h2>
+<pre><code># 启动服务
+[root@c803-18 ~]# echo &quot;https is works&quot; &gt; /var/www/html/index.html
+[root@c803-18 ~]# systemctl start httpd
+
+##验证
+[C:\~]$ curl -k https://10.0.0.18
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100    15  100    15    0     0     15      0  0:00:01 --:--:--  0:00:01 15000
+https is works
+
+</code></pre>
+<h2 id="hsts配置">HSTS配置</h2>
+<pre><code># 现有确认模块正确加载
+[root@c803-18 ~]# httpd -M | grep -i rewrite
+ rewrite_module (shared)
+[root@c803-18 ~]# httpd -M | grep -i header
+ headers_module (shared)
+ 
+
+# 修改配置文件
+[root@c803-18 ~]# vim /etc/httpd/conf.d/hsts.conf
+
+Header always set Strict-Transport-Security &quot;max-age=31536000; includeSubdomains; preload&quot;
+RewriteEngine On
+RewriteRule ^(/.*)$ https://%{HTTP_HOST}$1 [redirect=302]
+
+# 重启
+[root@c803-18 ~]# systemctl restart httpd
+
+
+# 验证
+[C:\~]$ curl -Lk http://10.0.0.18
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100   202  100   202    0     0    202      0  0:00:01 --:--:--  0:00:01  197k
+100    15  100    15    0     0     15      0  0:00:01 --:--:--  0:00:01    15
+https is works
+
+[C:\~]$ 
+
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#apache2%E5%AE%9E%E7%8E%B0https%E6%A1%88%E4%BE%8B">apache2实现https案例</a>
+<ul>
+<li><a href="#%E5%87%86%E5%A4%87%E8%AF%81%E4%B9%A6">准备证书</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85apache2-httpd%E6%9C%8D%E5%8A%A1%E5%B9%B6%E4%BF%AE%E6%94%B9%E7%9B%B8%E5%85%B3%E9%85%8D%E7%BD%AE">安装apache2 httpd服务并修改相关配置</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E5%B9%B6%E9%AA%8C%E8%AF%81">启动服务并验证</a></li>
+<li><a href="#hsts%E9%85%8D%E7%BD%AE">HSTS配置</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://zhaid0ngxue.github.io/post/2021030903-ubuntu2004-bian-yi-an-zhuang-apache2-fen-bu-bian-yi/">
+              <h3 class="post-title">
+                2021030903 - Ubuntu2004编译安装apache2---分步编译
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  <a href="https://zhaid0ngxue.github.io/">回到首页</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:history.back(-1)">返回到上一个页面呦(本地缓存)</a>
+  <a class="rss" href="https://zhaid0ngxue.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

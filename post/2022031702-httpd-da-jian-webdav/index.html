@@ -1,0 +1,240 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2022031702 - httpd搭建webdav | ZhaiD0ngxue&#39;s Blog.</title>
+<link rel="shortcut icon" href="https://zhaid0ngxue.github.io/favicon.ico?v=1699796227965">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zhaid0ngxue.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="2022031702 - httpd搭建webdav | ZhaiD0ngxue&#39;s Blog. - Atom Feed" href="https://zhaid0ngxue.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="my index node: 2022031702
+[toc]
+httpd搭建webdav
+规划说明
+httpd 2.4.6
+
+
+安装httpd
+[root@test3 ~]# yum -y install httpd httpd-tool..." />
+    <meta name="keywords" content="运维体系-ApacheHttp" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zhaid0ngxue.github.io">
+  <img class="avatar" src="https://zhaid0ngxue.github.io/images/avatar.png?v=1699796227965" alt="">
+  </a>
+  <h1 class="site-title">
+    ZhaiD0ngxue&#39;s Blog.
+  </h1>
+  <p class="site-description">
+    <marquee width=400 behavior=alternate direction=left align=middle><font color=#dee2e6> 学点东西总没错... </font></marquee>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="https://zhaid0ngxue.github.io/post/lian-xi-fang-shi" class="menu">
+          联系我
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              2022031702 - httpd搭建webdav
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-11-12
+              </span>
+              <span>
+                2 min read
+              </span>
+              
+                <a href="https://zhaid0ngxue.github.io/tag/oMeZL9uVb/" class="post-tag">
+                  # 运维体系-ApacheHttp
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>my index node: 2022031702</p>
+<p>[toc]</p>
+<h1 id="httpd搭建webdav">httpd搭建webdav</h1>
+<h2 id="规划说明">规划说明</h2>
+<pre><code>httpd 2.4.6
+
+</code></pre>
+<h2 id="安装httpd">安装httpd</h2>
+<pre><code>[root@test3 ~]# yum -y install httpd httpd-tools
+
+</code></pre>
+<h2 id="添加认证密码">添加认证密码</h2>
+<pre><code>[root@test3 ~]# htpasswd -bc /etc/httpd/webdav.pwd test 123456
+Adding password for user test
+[root@test3 ~]# chmod 644 /etc/httpd/webdav.pwd
+[root@test3 ~]#
+
+</code></pre>
+<h2 id="添加配置文件">添加配置文件</h2>
+<pre><code>[root@test3 ~]# vim /etc/httpd/conf.d/webdav.conf
+
+
+&lt;IfModule mod_dav.c&gt;
+Alias /webdav &quot;/var/www/webdav&quot;
+&lt;Directory /var/www/webdav&gt;
+    Dav On
+    Options +Indexes
+    IndexOptions FancyIndexing
+    AddDefaultCharset UTF-8
+    AuthType Basic
+    AuthName &quot;zhaidx WebDAV Server&quot;
+    AuthUserFile /etc/httpd/webdav.pwd
+    Require valid-user
+    Require all granted
+&lt;/Directory&gt;
+&lt;/IfModule&gt;
+
+
+</code></pre>
+<h2 id="创建webdav目录">创建webdav目录</h2>
+<pre><code>[root@test3 ~]# mkdir -p /var/www/webdav
+[root@test3 ~]# chown apache:apache /var/www/webdav
+
+</code></pre>
+<h2 id="启动服务并测试">启动服务并测试</h2>
+<pre><code>[root@test3 ~]# systemctl start httpd
+
+
+
+# 使用浏览器访问，输入用户名和密码即可访问webdav目录
+http://xx.xxx.xxx.xxx/webdav/
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#httpd%E6%90%AD%E5%BB%BAwebdav">httpd搭建webdav</a>
+<ul>
+<li><a href="#%E8%A7%84%E5%88%92%E8%AF%B4%E6%98%8E">规划说明</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85httpd">安装httpd</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E8%AE%A4%E8%AF%81%E5%AF%86%E7%A0%81">添加认证密码</a></li>
+<li><a href="#%E6%B7%BB%E5%8A%A0%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6">添加配置文件</a></li>
+<li><a href="#%E5%88%9B%E5%BB%BAwebdav%E7%9B%AE%E5%BD%95">创建webdav目录</a></li>
+<li><a href="#%E5%90%AF%E5%8A%A8%E6%9C%8D%E5%8A%A1%E5%B9%B6%E6%B5%8B%E8%AF%95">启动服务并测试</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://zhaid0ngxue.github.io/post/2021031101-apache2-shi-xian-https-an-li/">
+              <h3 class="post-title">
+                2021031101 - apache2实现https案例
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  <a href="https://zhaid0ngxue.github.io/">回到首页</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:history.back(-1)">返回到上一个页面呦(本地缓存)</a>
+  <a class="rss" href="https://zhaid0ngxue.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>

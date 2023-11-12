@@ -1,0 +1,1747 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2021021201 - DNS服务搭建 | ZhaiD0ngxue&#39;s Blog.</title>
+<link rel="shortcut icon" href="https://zhaid0ngxue.github.io/favicon.ico?v=1699796227965">
+<link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
+<link rel="stylesheet" href="https://zhaid0ngxue.github.io/styles/main.css">
+<link rel="alternate" type="application/atom+xml" title="2021021201 - DNS服务搭建 | ZhaiD0ngxue&#39;s Blog. - Atom Feed" href="https://zhaid0ngxue.github.io/atom.xml">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Droid+Serif:400,700">
+
+
+
+    <meta name="description" content="my index node:2021021201
+done
+[toc]
+正向DNS服务搭建
+规划
+[root@c610-61 ~]# 	客户端
+[root@c803-81 ~]# 	主DNS
+root@u1804-91:~# 	web服务器..." />
+    <meta name="keywords" content="运维体系-DNS" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+    <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
+  </head>
+  <body>
+    <div class="main">
+      <div class="main-content">
+        <div class="site-header">
+  <a href="https://zhaid0ngxue.github.io">
+  <img class="avatar" src="https://zhaid0ngxue.github.io/images/avatar.png?v=1699796227965" alt="">
+  </a>
+  <h1 class="site-title">
+    ZhaiD0ngxue&#39;s Blog.
+  </h1>
+  <p class="site-description">
+    <marquee width=400 behavior=alternate direction=left align=middle><font color=#dee2e6> 学点东西总没错... </font></marquee>
+  </p>
+  <div class="menu-container">
+    
+      
+        <a href="/" class="menu">
+          首页
+        </a>
+      
+    
+      
+        <a href="/archives" class="menu">
+          归档
+        </a>
+      
+    
+      
+        <a href="/tags" class="menu">
+          标签
+        </a>
+      
+    
+      
+        <a href="https://zhaid0ngxue.github.io/post/lian-xi-fang-shi" class="menu">
+          联系我
+        </a>
+      
+    
+  </div>
+  <div class="social-container">
+    
+      
+    
+      
+    
+      
+    
+      
+    
+      
+    
+  </div>
+</div>
+
+        <div class="post-detail">
+          <article class="post">
+            <h2 class="post-title">
+              2021021201 - DNS服务搭建
+            </h2>
+            <div class="post-info">
+              <span>
+                2023-11-12
+              </span>
+              <span>
+                45 min read
+              </span>
+              
+                <a href="https://zhaid0ngxue.github.io/tag/vtrNs10_P/" class="post-tag">
+                  # 运维体系-DNS
+                </a>
+              
+            </div>
+            
+            <div class="post-content-wrapper">
+              <div class="post-content">
+                <p>my index node:2021021201</p>
+<p>done</p>
+<p>[toc]</p>
+<h1 id="正向dns服务搭建">正向DNS服务搭建</h1>
+<h2 id="规划">规划</h2>
+<pre><code>[root@c610-61 ~]# 	客户端
+[root@c803-81 ~]# 	主DNS
+root@u1804-91:~# 	web服务器1
+root@u2004-101:~# 	web服务器2
+</code></pre>
+<h2 id="安装">安装</h2>
+<pre><code># 服务端安装,包括了named和rndc
+[root@c803-81 ~]# dnf -y install bind 
+
+# 工具的安装,如dig,host,nslookup
+[root@c803-81 ~]# dnf -y install bind-utils
+
+# 启动服务
+[root@c803-81 ~]# systemctl start named
+</code></pre>
+<h2 id="dns服务器配置">DNS服务器配置</h2>
+<pre><code># step1
+[root@c803-81 ~]# vim /etc/named.conf 
+
+# 注释如下两行
+options {
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+
+# step2
+[root@c803-81 ~]# vim /etc/named.rfc1912.zones 
+# 添加如下记录
+zone &quot;zdx.org&quot; IN {
+        type master;
+        file &quot;zdx.org.zone&quot;;
+};
+
+
+# step3
+# 创建记录文件
+[root@c803-81 ~]# touch /var/named/zdx.org.zone
+[root@c803-81 ~]# chmod 640 /var/named/zdx.org.zone
+[root@c803-81 ~]# chgrp named /var/named/zdx.org.zone
+[root@c803-81 ~]# ll /var/named/zdx.org.zone
+-rw-r-----. 1 root named 0 Feb 12 20:03 /var/named/zdx.org.zone
+[root@c803-81 ~]# 
+
+
+# step4
+[root@c803-81 ~]# vim /var/named/zdx.org.zone
+
+==自己写的,格式很丑,但也没有问题
+$TTL 86400
+zdx.org.  IN  SOA  master.zdx.org. admin.zdx.org.  (
+  1  ;
+  7200  ;
+  600  ;
+  604800  ;
+  86400  ;
+)
+  IN  NS  master.zdx.org.
+master  IN  A  10.0.0.81
+www  IN  A  10.0.0.91
+==
+
+==更专业,格式更整齐的写法,使用tab对齐
+[root@c803-81 ~]# cat /var/named/zdx.org.zone 
+$ORIGIN .
+$TTL 86400      ; 1 day
+zdx.org                 IN SOA  master.zdx.org. admin.zdx.org. (
+                                3          ; serial
+                                7200       ; refresh (2 hours)
+                                600        ; retry (10 minutes)
+                                604800     ; expire (1 week)
+                                86400      ; minimum (1 day)
+                                )
+                        NS      master.zdx.org.
+$ORIGIN zdx.org.
+master                  A       10.0.0.81
+www                     A       10.0.0.101
+[root@c803-81 ~]# cat -A  /var/named/zdx.org.zone 
+$ORIGIN .$
+$TTL 86400^I; 1 day$
+zdx.org^I^I^IIN SOA^Imaster.zdx.org. admin.zdx.org. ($
+^I^I^I^I3          ; serial$
+^I^I^I^I7200       ; refresh (2 hours)$
+^I^I^I^I600        ; retry (10 minutes)$
+^I^I^I^I604800     ; expire (1 week)$
+^I^I^I^I86400      ; minimum (1 day)$
+^I^I^I^I)$
+^I^I^INS^Imaster.zdx.org.$
+$ORIGIN zdx.org.$
+master^I^I^IA^I10.0.0.81$
+www^I^I^IA^I10.0.0.101$
+[root@c803-81 ~]# 
+==
+
+# step5,配置检查
+[root@c803-81 ~]# named-checkconf 
+[root@c803-81 ~]# named-checkzone zdx.org /var/named/zdx.org.zone 
+zone zdx.org/IN: loaded serial 1
+OK
+[root@c803-81 ~]# 
+
+# 重新加载配置
+[root@c803-81 ~]# rndc reload
+</code></pre>
+<h2 id="web1服务端准备">web1服务端准备</h2>
+<pre><code>root@u1804-91:~# apt install apache2
+root@u1804-91:~# echo &quot;91 www.zdx.org&quot; &gt; /var/www/html/index.html 
+root@u1804-91:~# curl 127.0.0.1
+91 www.zdx.org
+root@u1804-91:~# 
+</code></pre>
+<h2 id="客户端测试">客户端测试</h2>
+<pre><code>[root@c610-61 ~]# yum -y install bind-utils
+[root@c610-61 ~]# dig -t A www.zdx.org @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; -t A www.zdx.org @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 7594
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86400   IN      A       10.0.0.91
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Fri Feb 12 20:30:23 2021
+;; MSG SIZE  rcvd: 82
+
+[root@c610-61 ~]# 
+
+# 修改DNS
+[root@c610-61 ~]# vim /etc/sysconfig/network-scripts/ifcfg-eth0 
+#DNS1=223.6.6.6
+DNS1=10.0.0.81
+
+# 重启网络服务
+[root@c610-61 ~]# service network restart
+
+# DNS设置成功
+[root@c610-61 ~]# cat /etc/resolv.conf
+; generated by /sbin/dhclient-script
+search localdomain zdx.org
+nameserver 10.0.0.81
+[root@c610-61 ~]#
+
+# 成功请求了
+[root@c610-61 ~]# curl www.zdx.org
+91 www.zdx.org
+[root@c610-61 ~]# 
+</code></pre>
+<h2 id="dns允许动态更新">DNS允许动态更新</h2>
+<h3 id="服务器端配置">服务器端配置</h3>
+<pre><code># 修改域配置信息,添加allow-update
+[root@c803-81 ~]# vim /etc/named.rfc1912.zones 
+zone &quot;zdx.org&quot; IN {
+        type master;
+        file &quot;zdx.org.zone&quot;;
+        allow-update {any;};		# 修改这行,指定谁可以update,写IP也可以
+};
+
+# 千万别忘记reload
+[root@c803-81 ~]# rndc reload
+
+# 给zone目录添加权限
+[root@c803-81 ~]# chmod 770 /var/named/
+
+# 动态更新
+[root@c803-81 ~]# nsupdate 
+&gt; server 127.0.0.1
+&gt; zone zdx.org
+&gt; update add wap.zdx.org 86400 IN A 10.0.0.101
+&gt; send
+&gt; update delete www.zdx.org A
+&gt; send
+&gt; quit
+[root@c803-81 ~]# 
+
+# 会生成一个jnl的数据文件
+[root@c803-81 ~]# ll /var/named/zdx.org.zone.jnl 
+-rw-r--r--. 1 named named 719 Feb 12 21:03 /var/named/zdx.org.zone.jnl
+[root@c803-81 ~]# file /var/named/zdx.org.zone.jnl
+/var/named/zdx.org.zone.jnl: data
+[root@c803-81 ~]# 
+</code></pre>
+<h3 id="web2服务端准备">web2服务端准备</h3>
+<pre><code>root@u2004-101:~# apt install apache2
+root@u2004-101:~# echo &quot;101 wap.zdx.org&quot; &gt; /var/www/html/index.html 
+root@u2004-101:~# curl 127.0.0.1
+101 wap.zdx.org
+root@u2004-101:~# 
+</code></pre>
+<h3 id="客户端测试-2">客户端测试</h3>
+<pre><code>[root@c610-61 ~]# dig wap.zdx.org
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; wap.zdx.org
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 16917
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;wap.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+wap.zdx.org.            86400   IN      A       10.0.0.101
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Fri Feb 12 21:05:30 2021
+;; MSG SIZE  rcvd: 82
+
+[root@c610-61 ~]# curl wap.zdx.org
+101 wap.zdx.org
+[root@c610-61 ~]# 
+# 这条解析已经被删除了
+[root@c610-61 ~]# curl www.zdx.org
+curl: (6) Couldn't resolve host 'www.zdx.org'
+[root@c610-61 ~]# 
+</code></pre>
+<h1 id="反向dns服务搭建">反向DNS服务搭建</h1>
+<h2 id="规划-2">规划</h2>
+<pre><code>[root@c610-61 ~]# 	客户端
+[root@c803-81 ~]# 	主DNS
+</code></pre>
+<h2 id="安装-2">安装</h2>
+<pre><code>[root@c803-81 ~]# dnf -y install bind bind-utils
+[root@c803-81 ~]# systemctl start named
+</code></pre>
+<h2 id="dns服务器配置-2">DNS服务器配置</h2>
+<pre><code># step1,修改主配置文件
+[root@c803-81 ~]# vim /etc/named.conf 
+# 这两行不注释也可以,修改如下
+# 注释的含义其实也相同,也相当于修改成了下面这两行
+listen-on port 53 { localhost; };
+allow-query     { any; };
+		
+[root@c803-81 ~]# named-checkconf 
+
+# step2,修改区域配置
+[root@c803-81 ~]# vim /etc/named.rfc1912.zones 
+# 添加如下区域
+zone &quot;0.0.10.in-addr.arpa&quot; IN {
+        type master;
+        file &quot;10.0.0.zone&quot;;
+};
+
+[root@c803-81 ~]# named-checkconf 
+
+# step3,创建解析文件
+[root@c803-81 ~]# touch /var/named/10.0.0.zone
+[root@c803-81 ~]# chmod 640 /var/named/10.0.0.zone
+[root@c803-81 ~]# chgrp named /var/named/10.0.0.zone
+[root@c803-81 ~]# ll /var/named/10.0.0.zone
+-rw-r-----. 1 root named 0 Feb 12 22:28 /var/named/10.0.0.zone
+[root@c803-81 ~]# 
+
+
+# 添加解析配置
+[root@c803-81 ~]# vim /var/named/10.0.0.zone
+$TTL 1D
+0.0.10.in-addr.arpa.  IN  SOA  ns.zdx.org.  admin.zdx.org.  (
+  1  ;
+  1H  ;
+  5M  ;
+  7D  ;
+  1D  ;
+)
+  IN  NS  ns.zdx.org.
+91  IN PTR  www.zdx.org.
+101  IN PTR  wap.zdx.org.
+# 注意
+# 这里只是反向解析IP的最后一位,
+# 如果反向解析的是IP的后两位,比如要反向解析,10.0.*.*,应该要注意什么?
+# 一个是上面的区域配置要对应修改为:
+# zone &quot;0.10.in-addr.arpa&quot; IN {
+# 另一个就是这里,比如要解析10.0.1.2,正确的写法应该是:
+# 2.1  IN  PTR  ftp.zdx.org
+# 也需要反着来写
+
+
+# 检查
+[root@c803-81 ~]# named-checkconf 
+[root@c803-81 ~]# named-checkzone 0.0.10.in-addr.arpa /var/named/10.0.0.zone 
+zone 0.0.10.in-addr.arpa/IN: loaded serial 1
+OK
+[root@c803-81 ~]#
+
+
+# 重启生效
+[root@c803-81 ~]# rndc reload
+server reload successful
+[root@c803-81 ~]# 
+
+</code></pre>
+<h2 id="客户端验证">客户端验证</h2>
+<pre><code>[root@c610-61 ~]# yum -y install bind-utils
+
+# 方式一
+[root@c610-61 ~]# dig -t ptr 91.0.0.10.in-addr.arpa. @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; -t ptr 91.0.0.10.in-addr.arpa. @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 35406
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;91.0.0.10.in-addr.arpa.                IN      PTR
+
+;; ANSWER SECTION:
+91.0.0.10.in-addr.arpa. 86400   IN      PTR     www.zdx.org.
+
+;; AUTHORITY SECTION:
+0.0.10.in-addr.arpa.    86400   IN      NS      ns.zdx.org.
+
+;; Query time: 1 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Fri Feb 12 22:39:32 2021
+;; MSG SIZE  rcvd: 82
+
+[root@c610-61 ~]#
+
+# 方式二
+[root@c610-61 ~]# dig -x 10.0.0.101 @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; -x 10.0.0.101 @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 61960
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 0
+
+;; QUESTION SECTION:
+;101.0.0.10.in-addr.arpa.       IN      PTR
+
+;; ANSWER SECTION:
+101.0.0.10.in-addr.arpa. 86400  IN      PTR     wap.zdx.org.
+
+;; AUTHORITY SECTION:
+0.0.10.in-addr.arpa.    86400   IN      NS      ns.zdx.org.
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Fri Feb 12 22:40:58 2021
+;; MSG SIZE  rcvd: 83
+
+[root@c610-61 ~]# 
+
+# 方式三
+[root@c610-61 ~]# host 10.0.0.91
+91.0.0.10.in-addr.arpa domain name pointer www.zdx.org.
+[root@c610-61 ~]# 
+
+</code></pre>
+<h1 id="dns主从">DNS主从</h1>
+<h2 id="规划-3">规划</h2>
+<pre><code>[root@c610-61 ~]# 	客户端
+[root@c803-81 ~]# 	主DNS
+[root@c709-71 ~]#	从DNS
+</code></pre>
+<h2 id="安装-3">安装</h2>
+<pre><code>[root@c803-81 ~]# dnf -y install bind bind-utils
+[root@c803-81 ~]# systemctl start named
+
+[root@c709-71 ~]# yum -y install bind
+[root@c709-71 ~]# systemctl start named
+</code></pre>
+<h2 id="主dns服务器配置">主DNS服务器配置</h2>
+<pre><code># 修改主配置文件,添加配置项,允许从服务器获取数据(如果不写的话,默认行为是任何人都可以拉取数据,不安全)
+[root@c803-81 ~]# vim /etc/named.conf 
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+        allow-transfer {10.0.0.71;};
+		
+[root@c803-81 ~]# named-checkconf 
+
+# 添加区域配置
+[root@c803-81 ~]# vim /etc/named.rfc1912.zones 
+
+zone &quot;zdx.org&quot; IN {
+        type master;
+        file &quot;zdx.org.zone&quot;;
+};
+
+[root@c803-81 ~]# named-checkconf 
+
+# 创建解析文件
+[root@c803-81 ~]# touch /var/named/zdx.org.zone
+[root@c803-81 ~]# chmod 640 /var/named/zdx.org.zone
+[root@c803-81 ~]# chgrp named /var/named/zdx.org.zone
+[root@c803-81 ~]# ll /var/named/zdx.org.zone
+-rw-r-----. 1 root named 0 Feb 12 23:20 /var/named/zdx.org.zone
+[root@c803-81 ~]# 
+
+
+# 添加解析关系
+[root@c803-81 ~]# vim /var/named/zdx.org.zone
+
+$TTL 1D
+zdx.org.  IN  SOA  master.zdx.org.  mail.zdx.org.  (
+  1  ;
+  1D  ;
+  1H  ;
+  1W  ;
+  3H  ;
+)
+  IN NS master.zdx.org.
+  IN NS slave.zdx.org.
+master  IN A 10.0.0.81
+slave  IN A 10.0.0.71
+www  IN  A  10.0.0.91
+wap  IN  A  10.0.0.101
+
+# 检查
+[root@c803-81 ~]# named-checkzone zdx.org /var/named/zdx.org.zone 
+zone zdx.org/IN: loaded serial 1
+OK
+[root@c803-81 ~]#
+
+# 重启服务
+[root@c803-81 ~]# rndc reload
+server reload successful
+[root@c803-81 ~]# 
+</code></pre>
+<h2 id="从dns服务器配置">从DNS服务器配置</h2>
+<pre><code># 修改主配置文件
+[root@c709-71 ~]# vim /etc/named.conf 
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+        allow-transfer {none;};
+
+[root@c709-71 ~]# named-checkconf 
+
+# 修改区域配置,设置了从主DNS服务器获取数据
+[root@c709-71 ~]# vim /etc/named.rfc1912.zones 
+
+zone &quot;zdx.org&quot; IN {
+        type slave;
+        masters {10.0.0.81;};
+        file &quot;slaves/zdx.org.slave&quot;;
+};
+
+
+[root@c709-71 ~]# named-checkconf 
+
+# 重启生效
+[root@c709-71 ~]# rndc reload
+server reload successful
+[root@c709-71 ~]# 
+
+
+# 可以看到数据同步过来了
+[root@c709-71 ~]# ll /var/named/slaves/zdx.org.slave 
+-rw-r--r--. 1 named named 370 Feb 12 23:35 /var/named/slaves/zdx.org.slave
+[root@c709-71 ~]# file /var/named/slaves/zdx.org.slave
+/var/named/slaves/zdx.org.slave: data
+[root@c709-71 ~]# 
+
+</code></pre>
+<h2 id="客户端测试-3">客户端测试</h2>
+<pre><code>[root@c610-61 ~]# yum -y install bind-utils
+# 修改客户端DNS配置
+[root@c610-61 ~]# vim /etc/sysconfig/network-scripts/ifcfg-eth0 
+DNS1=10.0.0.81
+DNS2=10.0.0.71
+
+# 确认DNS修改成功
+[root@c610-61 ~]# service network restart
+[root@c610-61 ~]# cat /etc/resolv.conf
+; generated by /sbin/dhclient-script
+search localdomain zdx.org
+nameserver 10.0.0.81
+nameserver 10.0.0.71
+[root@c610-61 ~]# 
+
+# 可以看到此时是主DNS在服务
+[root@c610-61 ~]# dig -t A www.zdx.org
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; -t A www.zdx.org
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 6657
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 2, ADDITIONAL: 2
+
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86400   IN      A       10.0.0.91
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+zdx.org.                86400   IN      NS      slave.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+slave.zdx.org.          86400   IN      A       10.0.0.71
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Fri Feb 12 23:41:28 2021
+;; MSG SIZE  rcvd: 118
+
+[root@c610-61 ~]# 
+
+#关闭主NDS的服务后,可以看到是从DNS在服务
+[root@c803-81 ~]# systemctl stop named
+[root@c610-61 ~]# dig -t A wap.zdx.org
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; -t A wap.zdx.org
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 33812
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 2, ADDITIONAL: 2
+
+;; QUESTION SECTION:
+;wap.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+wap.zdx.org.            86400   IN      A       10.0.0.101
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      slave.zdx.org.
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+slave.zdx.org.          86400   IN      A       10.0.0.71
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.71#53(10.0.0.71)
+;; WHEN: Fri Feb 12 23:43:42 2021
+;; MSG SIZE  rcvd: 118
+
+[root@c610-61 ~]#  
+
+</code></pre>
+<h1 id="父域和子域的分布式dns解析">父域和子域的分布式DNS解析</h1>
+<h2 id="规划-4">规划</h2>
+<pre><code>[root@c610-61 ~]# 		客户端
+[root@c803-81 ~]# 		主DNS服务器,主web服务器
+[root@c709-71 ~]# 		子域服务器beijing
+[root@c803-82 ~]# 		子域服务器shanghai
+root@u1804-91:~# 		web服务器beijing
+root@u2004-101:~# 		web服务器shanghai
+</code></pre>
+<h2 id="web服务器beijing配置">web服务器beijing配置</h2>
+<pre><code>root@u1804-91:~# apt -y install apache2
+root@u1804-91:~# echo &quot;91 www.beijing.zdx.org&quot; &gt; /var/www/html/index.html 
+root@u1804-91:~# curl 127.0.0.1
+91 www.beijing.zdx.org
+root@u1804-91:~# 
+</code></pre>
+<h2 id="web服务器shanghai配置">web服务器shanghai配置</h2>
+<pre><code>root@u2004-101:~# apt -y install apache2
+root@u2004-101:~# echo &quot;101 www.shanghai.zdx.org&quot; &gt; /var/www/html/index.html 
+root@u2004-101:~# curl 127.0.0.1
+101 www.shanghai.zdx.org
+root@u2004-101:~# 
+</code></pre>
+<h2 id="主dns服务器配置-2">主DNS服务器配置</h2>
+<pre><code># 安装服务
+[root@c803-81 ~]# dnf -y install bind bind-utils
+[root@c803-81 ~]# systemctl start named
+# 修改主配置文件,额外关闭了加密验证
+[root@c803-81 ~]# vim /etc/named.conf 
+
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+        allow-transfer {10.0.0.71;10.0.0.82;};
+        dnssec-enable no;
+        dnssec-validation no;
+				
+[root@c803-81 ~]# named-checkconf 
+
+# 修改区域配置
+[root@c803-81 ~]# vim /etc/named.rfc1912.zones 
+
+zone &quot;zdx.org&quot; IN {
+        type master;
+        file &quot;zdx.org.zone&quot;;
+};
+
+[root@c803-81 ~]# named-checkconf 
+
+# 创建解析文件
+[root@c803-81 ~]# touch /var/named/zdx.org.zone
+[root@c803-81 ~]# chmod 640 /var/named/zdx.org.zone
+[root@c803-81 ~]# chgrp named /var/named/zdx.org.zone
+[root@c803-81 ~]# ll /var/named/zdx.org.zone
+-rw-r-----. 1 root named 0 Feb 13 00:25 /var/named/zdx.org.zone
+[root@c803-81 ~]# 
+
+
+# 添加解析配置
+[root@c803-81 ~]# vim /var/named/zdx.org.zone
+
+
+$TTL 1D
+zdx.org.  IN  SOA  master.zdx.org.  mail.zdx.org.  (
+  1  ;
+  1D  ;
+  1H  ;
+  1W  ;
+  1D  ;
+)
+  IN  NS  master.zdx.org.
+beijing  IN  NS  beijingsub
+shanghai  IN  NS  shanghaisub
+master  IN  A  10.0.0.81
+www  IN  A  10.0.0.81
+beijingsub  IN  A  10.0.0.71
+shanghaisub  IN  A  10.0.0.82
+
+
+[root@c803-81 ~]# named-checkzone zdx.org /var/named/zdx.org.zone 
+zone zdx.org/IN: loaded serial 1
+OK
+[root@c803-81 ~]#
+
+# 生效
+[root@c803-81 ~]# rndc reload
+server reload successful
+[root@c803-81 ~]# 
+
+
+# 配置httpd
+[root@c803-81 ~]# yum -y install httpd
+[root@c803-81 ~]# systemctl start httpd
+[root@c803-81 ~]# echo &quot;81 www.zdx.org&quot; &gt; /var/www/html/index.html
+[root@c803-81 ~]# curl 127.0.0.1
+81 www.zdx.org
+[root@c803-81 ~]#
+</code></pre>
+<h2 id="子域服务器beijing配置">子域服务器beijing配置</h2>
+<pre><code># 安装服务
+[root@c709-71 ~]# yum -y install bind bind-utils
+[root@c709-71 ~]# systemctl start named
+# 修改主配置
+[root@c709-71 ~]# vim /etc/named.conf 
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+        allow-transfer  {none;};
+		
+# 检查配置
+[root@c709-71 ~]# named-checkconf 
+
+# 修改区域配置
+[root@c709-71 ~]# vim /etc/named.rfc1912.zones 
+
+zone &quot;beijing.zdx.org&quot;  IN  {
+        type master;
+        file &quot;beijing.zdx.org.zone&quot;;
+};
+
+[root@c709-71 ~]# named-checkconf 
+
+# 创建解析文件
+[root@c709-71 ~]# touch /var/named/beijing.zdx.org.zone
+[root@c709-71 ~]# chmod 640 /var/named/beijing.zdx.org.zone
+[root@c709-71 ~]# chgrp named /var/named/beijing.zdx.org.zone
+[root@c709-71 ~]# ll /var/named/beijing.zdx.org.zone
+-rw-r-----. 1 root named 0 Feb 13 00:46 /var/named/beijing.zdx.org.zone
+[root@c709-71 ~]# 
+
+
+# 添加解析配置
+[root@c709-71 ~]# vim /var/named/beijing.zdx.org.zone
+
+$TTL 86400
+beijing.zdx.org.  IN  SOA  master.beijing.zdx.org.  mail.beijing.zdx.org.  (
+  1  ;
+  1D  ;
+  1H  ;
+  1W  ;
+  1D  ;
+)
+  IN  NS  master.beijing.zdx.org.
+master  IN  A 10.0.0.71
+www  IN  A  10.0.0.91
+
+# 检查
+[root@c709-71 ~]# named-checkzone beijing.zdx.org /var/named/beijing.zdx.org.zone 
+zone beijing.zdx.org/IN: loaded serial 1
+OK
+[root@c709-71 ~]# 
+
+# 生效
+[root@c709-71 ~]# rndc reload
+server reload successful
+[root@c709-71 ~]# 
+</code></pre>
+<h2 id="子域服务器shanghai配置">子域服务器shanghai配置</h2>
+<pre><code>[root@c803-82 ~]# dnf -y install bind bind-utils
+[root@c803-82 ~]# systemctl start named
+# 修改主配置文件
+[root@c803-82 ~]# vim /etc/named.conf 
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+        allow-transfer  {none;};
+		
+
+[root@c803-82 ~]# named-checkconf 
+
+
+# 修改区域配置
+[root@c803-82 ~]# vim /etc/named.rfc1912.zones 
+
+zone  &quot;shanghai.zdx.org&quot;  IN  {
+        type master;
+        file &quot;shanghai.zdx.org.zone&quot;;
+};
+
+[root@c803-82 ~]# named-checkconf 
+
+# 添加解析文件
+[root@c803-82 ~]# touch /var/named/shanghai.zdx.org.zone
+[root@c803-82 ~]# chmod 640 /var/named/shanghai.zdx.org.zone
+[root@c803-82 ~]# chgrp named /var/named/shanghai.zdx.org.zone
+[root@c803-82 ~]# ll /var/named/shanghai.zdx.org.zone
+-rw-r-----. 1 root named 0 Feb 13 01:03 /var/named/shanghai.zdx.org.zone
+[root@c803-82 ~]# 
+
+# 添加解析规则
+[root@c803-82 ~]# vim /var/named/shanghai.zdx.org.zone
+
+$TTL 1D
+shanghai.zdx.org.  IN  SOA  master.shanghai.zdx.org.  mail.shanghai.zdx.org.  (
+  1  ;
+  1D  ;
+  1H  ;
+  1W  ;
+  1D  ;
+)
+  IN NS  master.shanghai.zdx.org.
+master  IN  A  10.0.0.82
+www  IN  A  10.0.0.101
+
+# 检查
+[root@c803-82 ~]# named-checkzone shanghai.zdx.org /var/named/shanghai.zdx.org.zone 
+zone shanghai.zdx.org/IN: loaded serial 1
+OK
+[root@c803-82 ~]#
+
+# 生效
+[root@c803-82 ~]# rndc reload
+server reload successful
+[root@c803-82 ~]#
+</code></pre>
+<h2 id="客户端测试-4">客户端测试</h2>
+<pre><code># 修改DNS
+[root@c610-61 ~]# vim /etc/sysconfig/network-scripts/ifcfg-eth0 
+#DNS1=223.6.6.6
+DNS1=10.0.0.81
+
+[root@c610-61 ~]# service network restart
+[root@c610-61 ~]# cat /etc/resolv.conf
+; generated by /sbin/dhclient-script
+search localdomain zdx.org
+nameserver 10.0.0.81
+[root@c610-61 ~]# 
+
+# 安装测试工具
+[root@c610-61 ~]# yum -y install bind-utils
+
+# 根域成功
+[root@c610-61 ~]# dig -t A www.zdx.org
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; -t A www.zdx.org
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 42310
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86400   IN      A       10.0.0.81
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Sat Feb 13 01:11:54 2021
+;; MSG SIZE  rcvd: 82
+
+[root@c610-61 ~]# curl www.zdx.org
+81 www.zdx.org
+[root@c610-61 ~]# 
+
+# beijing子域成功
+[root@c610-61 ~]# dig -t A www.beijing.zdx.org @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; -t A www.beijing.zdx.org @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 41958
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;www.beijing.zdx.org.           IN      A
+
+;; ANSWER SECTION:
+www.beijing.zdx.org.    86400   IN      A       10.0.0.91
+
+;; AUTHORITY SECTION:
+beijing.zdx.org.        86400   IN      NS      beijingsub.zdx.org.
+
+;; ADDITIONAL SECTION:
+beijingsub.zdx.org.     86400   IN      A       10.0.0.71
+
+;; Query time: 3 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Sat Feb 13 00:55:16 2021
+;; MSG SIZE  rcvd: 94
+
+[root@c610-61 ~]# 
+
+[root@c610-61 ~]# curl www.beijing.zdx.org
+91 www.beijing.zdx.org
+[root@c610-61 ~]# 
+
+
+# shanghai子域配置成功
+[root@c610-61 ~]# dig -t A www.shanghai.zdx.org
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; -t A www.shanghai.zdx.org
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 43361
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;www.shanghai.zdx.org.          IN      A
+
+;; ANSWER SECTION:
+www.shanghai.zdx.org.   86400   IN      A       10.0.0.101
+
+;; AUTHORITY SECTION:
+shanghai.zdx.org.       86400   IN      NS      shanghaisub.zdx.org.
+
+;; ADDITIONAL SECTION:
+shanghaisub.zdx.org.    86400   IN      A       10.0.0.82
+
+;; Query time: 1 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Sat Feb 13 01:08:12 2021
+;; MSG SIZE  rcvd: 96
+
+[root@c610-61 ~]# curl www.shanghai.zdx.org
+101 www.shanghai.zdx.org
+[root@c610-61 ~]# 
+
+</code></pre>
+<h1 id="dns转发">DNS转发</h1>
+<blockquote>
+<ol>
+<li>场景,应用在父域和子域系统的子域DNS服务器上面,当子域的客户端访问互联网时,子域DNS应首先查询父域DNS服务器的缓存以提高效率,所以需要启用转发</li>
+<li>根据规则可以分为为全局转发和特定域转发</li>
+<li>根据行为可以分为first(先查询父DNS服务器,如果未能获取answer则自行去递归查询互联网根DNS服务器)和only(仅查询父DNS服务器,如果未能获取answer则返回失败).</li>
+</ol>
+</blockquote>
+<h2 id="规划-5">规划</h2>
+<pre><code>[root@c803-81 ~]# 		父域DNS服务器
+[root@c803-82 ~]# 		子域DNS服务器chengdu
+root@u1804-91:~# 		父域下的web服务器www.zdx.org
+root@u2004-101:~# 		子域下的客户端
+</code></pre>
+<h2 id="父域下的web服务器wwwzdxorg准备">父域下的web服务器www.zdx.org准备</h2>
+<pre><code>root@u1804-91:~# apt -y install apache2
+root@u1804-91:~# echo &quot;91 www.zdx.org&quot; &gt; /var/www/html/index.html 
+root@u1804-91:~# curl 127.0.0.1
+91 www.zdx.org
+root@u1804-91:~# 
+</code></pre>
+<h2 id="父域dns服务器配置">父域DNS服务器配置</h2>
+<pre><code># 安装服务并启动
+[root@c803-81 ~]# dnf -y install bind bind-utils
+[root@c803-81 ~]# systemctl start named
+
+# 修改主配置
+[root@c803-81 ~]# vim /etc/named.conf 
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+        allow-transfer  {10.0.0.82;};
+        dnssec-enable no;		
+        dnssec-validation no;		
+		
+[root@c803-81 ~]# named-checkconf 		
+
+# 修改区域配置文件
+[root@c803-81 ~]# vim /etc/named.rfc1912.zones 
+
+
+zone &quot;zdx.org&quot;  IN  {
+        type master;
+        file &quot;zdx.org.zone&quot;;
+};
+
+[root@c803-81 ~]# named-checkconf 
+
+
+# 添加解析文件
+[root@c803-81 ~]# touch /var/named/zdx.org.zone
+[root@c803-81 ~]# chmod 640 /var/named/zdx.org.zone
+[root@c803-81 ~]# chgrp named /var/named/zdx.org.zone
+[root@c803-81 ~]# ll /var/named/zdx.org.zone
+-rw-r-----. 1 root named 0 Feb 13 15:42 /var/named/zdx.org.zone
+[root@c803-81 ~]# 
+
+# 添加解析规则
+[root@c803-81 ~]# vim /var/named/zdx.org.zone
+
+$TTL 86400
+zdx.org.  IN  SOA  master.zdx.org. mail.zdx.org.  (
+  1  ;
+  1D  ;
+  1H  ;
+  1W  ;
+  1D  ;
+)
+  IN  NS  master.zdx.org.
+chengdusub.zdx.org.  IN  NS  chengdu.zdx.org.
+master  IN  A  10.0.0.81
+chengdu  IN  A  10.0.0.82
+www  IN  A  10.0.0.91
+
+# 检查
+[root@c803-81 ~]# named-checkzone zdx.org /var/named/zdx.org.zone 
+zone zdx.org/IN: loaded serial 1
+OK
+[root@c803-81 ~]# 
+
+[root@c803-81 ~]# rndc reload
+server reload successful
+[root@c803-81 ~]# 
+</code></pre>
+<h2 id="子域dns服务器chengdu配置全局转发">子域DNS服务器chengdu配置全局转发</h2>
+<h3 id="子域dns配置">子域DNS配置</h3>
+<pre><code># 安装服务
+[root@c803-82 ~]# dnf -y install bind bind-utils
+[root@c803-82 ~]# systemctl start named
+
+[root@c803-82 ~]# vim /etc/named.conf 
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+        allow-transfer  {none;};
+        dnssec-enable no;
+        dnssec-validation no;
+        forward  first;
+        forwarders  {10.0.0.81;};		
+
+# 检查
+[root@c803-82 ~]# named-checkconf 
+# reload生效
+[root@c803-82 ~]# rndc reload
+server reload successful
+[root@c803-82 ~]# 
+</code></pre>
+<h3 id="子域中客户端测试">子域中客户端测试</h3>
+<pre><code># 通过主DNS可以查询
+root@u2004-101:~# dig www.zdx.org @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; www.zdx.org @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 45265
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+; COOKIE: 71c3bc536cef4ef9633c8f1b60278647af6d5a7dfe6f6036 (good)
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86400   IN      A       10.0.0.91
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Sat Feb 13 15:56:54 CST 2021
+;; MSG SIZE  rcvd: 121
+
+root@u2004-101:~# 
+
+# 通过子域DNS也可以查询
+root@u2004-101:~# dig www.zdx.org @10.0.0.82
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; www.zdx.org @10.0.0.82
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 6453
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+; COOKIE: d60c9051e2f8d612b6abaca96027865a791042fb871a4972 (good)
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86400   IN      A       10.0.0.91
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.82#53(10.0.0.82)
+;; WHEN: Sat Feb 13 15:57:14 CST 2021
+;; MSG SIZE  rcvd: 121
+
+root@u2004-101:~#
+
+# 修改DNS,指定的是子域DNS服务器
+root@u2004-101:~# vim /etc/netplan/01-netcfg.yaml 
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens33:
+      addresses: [10.0.0.101/24]
+      gateway4: 10.0.0.2
+      nameservers:
+        addresses: [10.0.0.82]
+		
+root@u2004-101:~# netplan apply 
+
+# 查询父域中的DNS记录,可以正确查询
+root@u2004-101:~# dig www.zdx.org 
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; www.zdx.org
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 12733
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 65494
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            85889   IN      A       10.0.0.91
+
+;; Query time: 0 msec
+;; SERVER: 127.0.0.53#53(127.0.0.53)
+;; WHEN: Sat Feb 13 16:05:45 CST 2021
+;; MSG SIZE  rcvd: 56
+
+root@u2004-101:~# 
+
+root@u2004-101:~# curl www.zdx.org
+91 www.zdx.org
+root@u2004-101:~# 
+</code></pre>
+<h2 id="子域dns服务器chengdu配置特定区域转发">子域DNS服务器chengdu配置特定区域转发</h2>
+<h3 id="子域dns配置-2">子域DNS配置</h3>
+<pre><code># 安装服务
+[root@c803-82 ~]# dnf -y install bind bind-utils
+[root@c803-82 ~]# systemctl start named
+# 修改主配置
+[root@c803-82 ~]# vim /etc/named.conf 
+//      listen-on port 53 { 127.0.0.1; };
+//      allow-query     { localhost; };
+        allow-transfer  {none;};
+        dnssec-enable no;
+        dnssec-validation no;		
+		
+[root@c803-82 ~]# named-checkconf 
+
+# 修改区域配置,设置了特定域的转发
+[root@c803-82 ~]# vim /etc/named.rfc1912.zones 
+
+zone &quot;zdx.org&quot;  IN  {
+        type forward;
+        forward first;
+        forwarders {10.0.0.81;};
+};
+
+[root@c803-82 ~]# named-checkconf 
+
+# 重启生效
+[root@c803-82 ~]# rndc reload
+server reload successful
+[root@c803-82 ~]# 
+</code></pre>
+<h3 id="子域中客户端测试-2">子域中客户端测试</h3>
+<pre><code># 指定主DNS可以查询到
+root@u2004-101:~# dig www.zdx.org @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; www.zdx.org @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 59303
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+; COOKIE: 2b9744d0ed8be22fe6ac1a6760278bdf8b0ac8e62e857d62 (good)
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86400   IN      A       10.0.0.91
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Sat Feb 13 16:20:47 CST 2021
+;; MSG SIZE  rcvd: 121
+
+# 指定子DNS也可以查询到,说明转发成功
+root@u2004-101:~# dig www.zdx.org @10.0.0.82
+
+; &lt;&lt;&gt;&gt; DiG 9.16.1-Ubuntu &lt;&lt;&gt;&gt; www.zdx.org @10.0.0.82
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 40302
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 13, ADDITIONAL: 27
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+; COOKIE: 10a5acbb1dd4c20a01ed95de60278be67c1218a24f30affd (good)
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86256   IN      A       10.0.0.91
+
+;; AUTHORITY SECTION:
+.                       518114  IN      NS      f.root-servers.net.
+.                       518114  IN      NS      m.root-servers.net.
+.                       518114  IN      NS      k.root-servers.net.
+.                       518114  IN      NS      d.root-servers.net.
+.                       518114  IN      NS      e.root-servers.net.
+.                       518114  IN      NS      b.root-servers.net.
+.                       518114  IN      NS      g.root-servers.net.
+.                       518114  IN      NS      l.root-servers.net.
+.                       518114  IN      NS      j.root-servers.net.
+.                       518114  IN      NS      i.root-servers.net.
+.                       518114  IN      NS      c.root-servers.net.
+.                       518114  IN      NS      a.root-servers.net.
+.                       518114  IN      NS      h.root-servers.net.
+
+;; ADDITIONAL SECTION:
+a.root-servers.net.     518114  IN      A       198.41.0.4
+b.root-servers.net.     518114  IN      A       199.9.14.201
+c.root-servers.net.     518114  IN      A       192.33.4.12
+d.root-servers.net.     518114  IN      A       199.7.91.13
+e.root-servers.net.     518114  IN      A       192.203.230.10
+f.root-servers.net.     518114  IN      A       192.5.5.241
+g.root-servers.net.     518114  IN      A       192.112.36.4
+h.root-servers.net.     518114  IN      A       198.97.190.53
+i.root-servers.net.     518114  IN      A       192.36.148.17
+j.root-servers.net.     518114  IN      A       192.58.128.30
+k.root-servers.net.     518114  IN      A       193.0.14.129
+l.root-servers.net.     518114  IN      A       199.7.83.42
+m.root-servers.net.     518114  IN      A       202.12.27.33
+a.root-servers.net.     518114  IN      AAAA    2001:503:ba3e::2:30
+b.root-servers.net.     518114  IN      AAAA    2001:500:200::b
+c.root-servers.net.     518114  IN      AAAA    2001:500:2::c
+d.root-servers.net.     518114  IN      AAAA    2001:500:2d::d
+e.root-servers.net.     518114  IN      AAAA    2001:500:a8::e
+f.root-servers.net.     518114  IN      AAAA    2001:500:2f::f
+g.root-servers.net.     518114  IN      AAAA    2001:500:12::d0d
+h.root-servers.net.     518114  IN      AAAA    2001:500:1::53
+i.root-servers.net.     518114  IN      AAAA    2001:7fe::53
+j.root-servers.net.     518114  IN      AAAA    2001:503:c27::2:30
+k.root-servers.net.     518114  IN      AAAA    2001:7fd::1
+l.root-servers.net.     518114  IN      AAAA    2001:500:9f::42
+m.root-servers.net.     518114  IN      AAAA    2001:dc3::35
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.82#53(10.0.0.82)
+;; WHEN: Sat Feb 13 16:20:53 CST 2021
+;; MSG SIZE  rcvd: 867
+
+root@u2004-101:~# 
+
+root@u2004-101:~# vim /etc/netplan/01-netcfg.yaml 
+network:
+  version: 2
+  renderer: networkd
+  ethernets:
+    ens33:
+      addresses: [10.0.0.101/24]
+      gateway4: 10.0.0.2
+      nameservers:
+        addresses: [10.0.0.82]
+
+root@u2004-101:~# netplan apply 
+
+root@u2004-101:~# curl www.zdx.org
+91 www.zdx.org
+root@u2004-101:~# 
+
+
+# 子域DNS服务器上的log
+Feb 13 16:23:05 c803-82 named[9659]: query logging is now on
+Feb 13 16:23:11 c803-82 named[9659]: client @0x7fa388130050 10.0.0.101#40758 (www.zdx.org): query: www.zdx.org IN A +E(0)K (10.0.0.82)
+</code></pre>
+<h1 id="通过dns实现cdn">通过DNS实现CDN</h1>
+<h2 id="规划-6">规划</h2>
+<pre><code>[root@c803-81 ~]# 	DNS服务器
+root@u1804-91:~# 	web服务端beijing
+root@u2004-101:~# 	web服务端shanghai
+[root@c610-61 ~]# 	beijing客户端
+[root@c709-71 ~]# 	shanghai客户端
+</code></pre>
+<h2 id="web服务端beijing准备">web服务端beijing准备</h2>
+<pre><code>root@u1804-91:~# apt -y install apache2
+root@u1804-91:~# echo &quot;91 www.zdx.org&quot; &gt; /var/www/html/index.html 
+root@u1804-91:~# curl 127.0.0.1
+91 www.zdx.org
+root@u1804-91:~# 
+</code></pre>
+<h2 id="web服务端shanghai准备">web服务端shanghai准备</h2>
+<pre><code>root@u2004-101:~# apt -y install apache2
+root@u2004-101:~# echo &quot;101 www.zdx.org&quot; &gt; /var/www/html/index.html 
+root@u2004-101:~# curl 127.0.0.1
+101 www.zdx.org
+root@u2004-101:~# 
+</code></pre>
+<h2 id="dns服务器配置-3">DNS服务器配置</h2>
+<pre><code># 安装服务
+[root@c803-81 ~]# dnf -y install bind bind-utils
+[root@c803-81 ~]# systemctl start named
+
+# 修改主配置文件,添加ACL
+[root@c803-81 ~]# vim /etc/named.conf 
+
+# 定义了ACL
+acl beijingnet {
+        10.0.0.61;		# 可以写网段,如10.0.0.0/24
+};
+
+acl shanghainet {
+        10.0.0.71;
+};
+
+acl othernet {
+        any;
+};
+# 定义view,将ACL和解析文件对应起来
+view beijingview {
+        match-clients {beijingnet;};
+        zone &quot;zdx.org&quot; {
+                type master;
+                file &quot;zdx.org.zone.beijing&quot;;
+        };
+        include &quot;/etc/named.rfc1912.zones&quot;;
+};
+
+view shanghaiview {
+        match-clients {shanghainet;};
+        zone &quot;zdx.org&quot; {
+                type master;
+                file &quot;zdx.org.zone.shanghai&quot;;
+        };
+        include &quot;/etc/named.rfc1912.zones&quot;;
+};
+view otherview {
+        match-clients {othernet;};
+        include &quot;/etc/named.rfc1912.zones&quot;;
+};
+
+# 如果使用了view,所有的zone都应该被包含在view中,所以要把最外面的的这下面一行注释掉.
+#include &quot;/etc/named.rfc1912.zones&quot;;
+# 要把下面一段也注释掉,转移到named.rfc1912.zones配置文件中去.
+#zone &quot;.&quot; IN {
+#        type hint;
+#        file &quot;named.ca&quot;;
+#};
+
+[root@c803-81 ~]# vim /etc/named.rfc1912.zones 
+# 转移添加如下一段内容
+zone &quot;.&quot; IN {
+        type hint;
+        file &quot;named.ca&quot;;
+};
+
+# 检查
+[root@c803-81 ~]# named-checkconf 
+
+# 创建解析文件
+[root@c803-81 ~]# touch /var/named/zdx.org.zone.beijing
+[root@c803-81 ~]# chmod 640 /var/named/zdx.org.zone.beijing
+[root@c803-81 ~]# chgrp named /var/named/zdx.org.zone.beijing
+[root@c803-81 ~]# touch /var/named/zdx.org.zone.shanghai
+[root@c803-81 ~]# chmod 640 /var/named/zdx.org.zone.shanghai
+[root@c803-81 ~]# chgrp named /var/named/zdx.org.zone.shanghai
+[root@c803-81 ~]# ll /var/named/zdx.org.zone.*
+-rw-r-----. 1 root named 0 Feb 13 17:50 /var/named/zdx.org.zone.beijing
+-rw-r-----. 1 root named 0 Feb 13 17:50 /var/named/zdx.org.zone.shanghai
+[root@c803-81 ~]# 
+
+
+# 分别添加解析内容
+[root@c803-81 ~]# vim /var/named/zdx.org.zone.beijing 
+
+$TTL 86400
+zdx.org.  IN  SOA  master.zdx.org.  mail.zdx.org.  (
+  1  ;
+  1D  ;
+  1H  ;
+  1W  ;
+  1D
+)
+  IN  NS  master.zdx.org.
+master  IN  A  10.0.0.81
+www  IN  A  10.0.0.91
+
+[root@c803-81 ~]# named-checkzone zdx.org /var/named/zdx.org.zone.beijing 
+zone zdx.org/IN: loaded serial 1
+OK
+[root@c803-81 ~]# 
+
+
+[root@c803-81 ~]# vim /var/named/zdx.org.zone.shanghai 
+
+$TTL 1D
+zdx.org.  IN  SOA  master.zdx.org.  mail.zdx.org.  (
+  1  ;
+  1D  ;
+  1H  ;
+  1W  ;
+  1D
+)
+  IN  NS  master.zdx.org.
+master  IN  A  10.0.0.81
+www  IN  A  10.0.0.101
+
+[root@c803-81 ~]# named-checkzone zdx.org /var/named/zdx.org.zone.shanghai 
+zone zdx.org/IN: loaded serial 1
+OK
+[root@c803-81 ~]#
+
+
+# 重启生效
+[root@c803-81 ~]# rndc reload
+server reload successful
+[root@c803-81 ~]# 
+</code></pre>
+<h2 id="beijing客户端测试">beijing客户端测试</h2>
+<pre><code>[root@c610-61 ~]# yum -y install bind-utils
+[root@c610-61 ~]# dig www.zdx.org @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.68.rc1.el6_10.8 &lt;&lt;&gt;&gt; www.zdx.org @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 63499
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 1
+
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86400   IN      A       10.0.0.91
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+
+;; Query time: 3 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Sat Feb 13 18:00:44 2021
+;; MSG SIZE  rcvd: 82
+
+[root@c610-61 ~]# 
+
+[root@c610-61 ~]# vim /etc/sysconfig/network-scripts/ifcfg-eth0 
+DNS1=10.0.0.81
+#DNS1=223.6.6.6
+[root@c610-61 ~]# service network restart
+[root@c610-61 ~]# cat /etc/resolv.conf
+; generated by /sbin/dhclient-script
+search localdomain zdx.org
+nameserver 10.0.0.81
+[root@c610-61 ~]# 
+
+[root@c610-61 ~]# curl www.zdx.org
+91 www.zdx.org
+[root@c610-61 ~]# 
+
+</code></pre>
+<h2 id="shanghai客户端测试">shanghai客户端测试</h2>
+<pre><code>[root@c709-71 ~]# yum -y install bind-utils
+[root@c709-71 ~]# dig www.zdx.org @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.11.4-P2-RedHat-9.11.4-26.P2.el7_9.3 &lt;&lt;&gt;&gt; www.zdx.org @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 18151
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 1, ADDITIONAL: 2
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            86400   IN      A       10.0.0.101
+
+;; AUTHORITY SECTION:
+zdx.org.                86400   IN      NS      master.zdx.org.
+
+;; ADDITIONAL SECTION:
+master.zdx.org.         86400   IN      A       10.0.0.81
+
+;; Query time: 0 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Sat Feb 13 18:01:02 CST 2021
+;; MSG SIZE  rcvd: 93
+
+[root@c709-71 ~]# 
+
+[root@c709-71 ~]# vim /etc/sysconfig/network-scripts/ifcfg-ens33 
+DNS1=10.0.0.81
+#DNS1=223.6.6.6
+[root@c709-71 ~]# systemctl restart network
+[root@c709-71 ~]# cat /etc/resolv.conf 
+# Generated by NetworkManager
+search zdx.org
+nameserver 10.0.0.81
+[root@c709-71 ~]# curl www.zdx.org
+101 www.zdx.org
+[root@c709-71 ~]# 
+</code></pre>
+<h2 id="其他客户端测试">其他客户端测试</h2>
+<pre><code>[root@c803-81 ~]# dig www.zdx.org @10.0.0.81
+
+; &lt;&lt;&gt;&gt; DiG 9.11.20-RedHat-9.11.20-5.el8 &lt;&lt;&gt;&gt; www.zdx.org @10.0.0.81
+;; global options: +cmd
+;; Got answer:
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 47901
+;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 2, ADDITIONAL: 1
+
+;; OPT PSEUDOSECTION:
+; EDNS: version: 0, flags:; udp: 4096
+; COOKIE: 16a442a61ccb9bb998fdb1716027a8ace1d388950ac44b13 (good)
+;; QUESTION SECTION:
+;www.zdx.org.                   IN      A
+
+;; ANSWER SECTION:
+www.zdx.org.            3600    IN      A       35.186.238.101
+
+;; AUTHORITY SECTION:
+zdx.org.                86395   IN      NS      ns2.namefind.com.
+zdx.org.                86395   IN      NS      ns1.namefind.com.
+
+;; Query time: 1255 msec
+;; SERVER: 10.0.0.81#53(10.0.0.81)
+;; WHEN: Sat Feb 13 18:23:40 CST 2021
+;; MSG SIZE  rcvd: 132
+
+[root@c803-81 ~]# 
+</code></pre>
+
+              </div>
+              <div class="toc-container">
+                <ul class="markdownIt-TOC">
+<li><a href="#%E6%AD%A3%E5%90%91dns%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA">正向DNS服务搭建</a>
+<ul>
+<li><a href="#%E8%A7%84%E5%88%92">规划</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85">安装</a></li>
+<li><a href="#dns%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE">DNS服务器配置</a></li>
+<li><a href="#web1%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%87%86%E5%A4%87">web1服务端准备</a></li>
+<li><a href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95">客户端测试</a></li>
+<li><a href="#dns%E5%85%81%E8%AE%B8%E5%8A%A8%E6%80%81%E6%9B%B4%E6%96%B0">DNS允许动态更新</a>
+<ul>
+<li><a href="#%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E9%85%8D%E7%BD%AE">服务器端配置</a></li>
+<li><a href="#web2%E6%9C%8D%E5%8A%A1%E7%AB%AF%E5%87%86%E5%A4%87">web2服务端准备</a></li>
+<li><a href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95-2">客户端测试</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E5%8F%8D%E5%90%91dns%E6%9C%8D%E5%8A%A1%E6%90%AD%E5%BB%BA">反向DNS服务搭建</a>
+<ul>
+<li><a href="#%E8%A7%84%E5%88%92-2">规划</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-2">安装</a></li>
+<li><a href="#dns%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE-2">DNS服务器配置</a></li>
+<li><a href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%AA%8C%E8%AF%81">客户端验证</a></li>
+</ul>
+</li>
+<li><a href="#dns%E4%B8%BB%E4%BB%8E">DNS主从</a>
+<ul>
+<li><a href="#%E8%A7%84%E5%88%92-3">规划</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85-3">安装</a></li>
+<li><a href="#%E4%B8%BBdns%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE">主DNS服务器配置</a></li>
+<li><a href="#%E4%BB%8Edns%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE">从DNS服务器配置</a></li>
+<li><a href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95-3">客户端测试</a></li>
+</ul>
+</li>
+<li><a href="#%E7%88%B6%E5%9F%9F%E5%92%8C%E5%AD%90%E5%9F%9F%E7%9A%84%E5%88%86%E5%B8%83%E5%BC%8Fdns%E8%A7%A3%E6%9E%90">父域和子域的分布式DNS解析</a>
+<ul>
+<li><a href="#%E8%A7%84%E5%88%92-4">规划</a></li>
+<li><a href="#web%E6%9C%8D%E5%8A%A1%E5%99%A8beijing%E9%85%8D%E7%BD%AE">web服务器beijing配置</a></li>
+<li><a href="#web%E6%9C%8D%E5%8A%A1%E5%99%A8shanghai%E9%85%8D%E7%BD%AE">web服务器shanghai配置</a></li>
+<li><a href="#%E4%B8%BBdns%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE-2">主DNS服务器配置</a></li>
+<li><a href="#%E5%AD%90%E5%9F%9F%E6%9C%8D%E5%8A%A1%E5%99%A8beijing%E9%85%8D%E7%BD%AE">子域服务器beijing配置</a></li>
+<li><a href="#%E5%AD%90%E5%9F%9F%E6%9C%8D%E5%8A%A1%E5%99%A8shanghai%E9%85%8D%E7%BD%AE">子域服务器shanghai配置</a></li>
+<li><a href="#%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95-4">客户端测试</a></li>
+</ul>
+</li>
+<li><a href="#dns%E8%BD%AC%E5%8F%91">DNS转发</a>
+<ul>
+<li><a href="#%E8%A7%84%E5%88%92-5">规划</a></li>
+<li><a href="#%E7%88%B6%E5%9F%9F%E4%B8%8B%E7%9A%84web%E6%9C%8D%E5%8A%A1%E5%99%A8wwwzdxorg%E5%87%86%E5%A4%87">父域下的web服务器www.zdx.org准备</a></li>
+<li><a href="#%E7%88%B6%E5%9F%9Fdns%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE">父域DNS服务器配置</a></li>
+<li><a href="#%E5%AD%90%E5%9F%9Fdns%E6%9C%8D%E5%8A%A1%E5%99%A8chengdu%E9%85%8D%E7%BD%AE%E5%85%A8%E5%B1%80%E8%BD%AC%E5%8F%91">子域DNS服务器chengdu配置全局转发</a>
+<ul>
+<li><a href="#%E5%AD%90%E5%9F%9Fdns%E9%85%8D%E7%BD%AE">子域DNS配置</a></li>
+<li><a href="#%E5%AD%90%E5%9F%9F%E4%B8%AD%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95">子域中客户端测试</a></li>
+</ul>
+</li>
+<li><a href="#%E5%AD%90%E5%9F%9Fdns%E6%9C%8D%E5%8A%A1%E5%99%A8chengdu%E9%85%8D%E7%BD%AE%E7%89%B9%E5%AE%9A%E5%8C%BA%E5%9F%9F%E8%BD%AC%E5%8F%91">子域DNS服务器chengdu配置特定区域转发</a>
+<ul>
+<li><a href="#%E5%AD%90%E5%9F%9Fdns%E9%85%8D%E7%BD%AE-2">子域DNS配置</a></li>
+<li><a href="#%E5%AD%90%E5%9F%9F%E4%B8%AD%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95-2">子域中客户端测试</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#%E9%80%9A%E8%BF%87dns%E5%AE%9E%E7%8E%B0cdn">通过DNS实现CDN</a>
+<ul>
+<li><a href="#%E8%A7%84%E5%88%92-6">规划</a></li>
+<li><a href="#web%E6%9C%8D%E5%8A%A1%E7%AB%AFbeijing%E5%87%86%E5%A4%87">web服务端beijing准备</a></li>
+<li><a href="#web%E6%9C%8D%E5%8A%A1%E7%AB%AFshanghai%E5%87%86%E5%A4%87">web服务端shanghai准备</a></li>
+<li><a href="#dns%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE-3">DNS服务器配置</a></li>
+<li><a href="#beijing%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95">beijing客户端测试</a></li>
+<li><a href="#shanghai%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95">shanghai客户端测试</a></li>
+<li><a href="#%E5%85%B6%E4%BB%96%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%B5%8B%E8%AF%95">其他客户端测试</a></li>
+</ul>
+</li>
+</ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+
+        
+          <div class="next-post">
+            <div class="next">下一篇</div>
+            <a href="https://zhaid0ngxue.github.io/post/2022031702-httpd-da-jian-webdav/">
+              <h3 class="post-title">
+                2022031702 - httpd搭建webdav
+              </h3>
+            </a>
+          </div>
+        
+
+        
+
+        <div class="site-footer">
+  <a href="https://zhaid0ngxue.github.io/">回到首页</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="javascript:history.back(-1)">返回到上一个页面呦(本地缓存)</a>
+  <a class="rss" href="https://zhaid0ngxue.github.io/atom.xml" target="_blank">
+    <i class="ri-rss-line"></i> RSS
+  </a>
+</div>
+
+      </div>
+    </div>
+
+    <script>
+      hljs.initHighlightingOnLoad()
+
+      let mainNavLinks = document.querySelectorAll(".markdownIt-TOC a");
+
+      // This should probably be throttled.
+      // Especially because it triggers during smooth scrolling.
+      // https://lodash.com/docs/4.17.10#throttle
+      // You could do like...
+      // window.addEventListener("scroll", () => {
+      //    _.throttle(doThatStuff, 100);
+      // });
+      // Only not doing it here to keep this Pen dependency-free.
+
+      window.addEventListener("scroll", event => {
+        let fromTop = window.scrollY;
+
+        mainNavLinks.forEach((link, index) => {
+          let section = document.getElementById(decodeURI(link.hash).substring(1));
+          let nextSection = null
+          if (mainNavLinks[index + 1]) {
+            nextSection = document.getElementById(decodeURI(mainNavLinks[index + 1].hash).substring(1));
+          }
+          if (section.offsetTop <= fromTop) {
+            if (nextSection) {
+              if (nextSection.offsetTop > fromTop) {
+                link.classList.add("current");
+              } else {
+                link.classList.remove("current");    
+              }
+            } else {
+              link.classList.add("current");
+            }
+          } else {
+            link.classList.remove("current");
+          }
+        });
+      });
+
+    </script>
+  </body>
+</html>
