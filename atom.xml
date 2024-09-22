@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://zhaid0ngxue.github.io</id>
+    <title>ZhaiD0ngxue&apos;s Blog.</title>
+    <updated>2024-09-22T10:18:27.865Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://zhaid0ngxue.github.io"/>
+    <link rel="self" href="https://zhaid0ngxue.github.io/atom.xml"/>
+    <subtitle>&lt;marquee width=400 behavior=alternate direction=left align=middle&gt;&lt;font color=#dee2e6&gt; 学点东西总没错... &lt;/font&gt;&lt;/marquee&gt;</subtitle>
+    <logo>https://zhaid0ngxue.github.io/images/avatar.png</logo>
+    <icon>https://zhaid0ngxue.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2024, ZhaiD0ngxue&apos;s Blog.</rights>
+</feed>
